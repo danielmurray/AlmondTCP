@@ -1,6 +1,6 @@
 #!/bin/sh
 LOCALFOLDER='almondroot'
-REMOTEIP='10.10.10.254'
+REMOTEIP='10.10.10.121'
 REMOTEUSER='root'
 REMOTEPASS='root'
 
@@ -64,13 +64,13 @@ function syncFileDirectory {
 	done
 }
 
-count=$( ping -w 1 -c 1 $REMOTEIP | grep icmp* | wc -l )
+count=$( ping -w -c 1 $REMOTEIP | grep icmp* | wc -l )
+
+echo $count
 
 if [ $count -eq 0 ]
 then
-    echo "No Almond, go to localhost:8000 to view files"
-    cd www
-    python -m SimpleHTTPServer
+    echo "I couldn't find the Almond, so go buy one and try again"
 else
 	updateFileDirectory
 	syncFileDirectory

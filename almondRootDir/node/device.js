@@ -46,7 +46,7 @@ var Devices = function() {
 	}
 
 	this.getDevices = function(){
-
+		console.log()
 	}
 	
 	listen()
