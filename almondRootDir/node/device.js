@@ -1,3 +1,5 @@
+'use strict';
+
 var fs = require("fs");
 var sys = require('sys')
 var util = require('util');
@@ -49,7 +51,7 @@ var Devices = function() {
 		console.log()
 	}
 	
-	listen()
+	this.listen()
 }
 util.inherits(Devices, EventEmitter);
 
