@@ -6,60 +6,90 @@ var util = require('util');
 var exec = require('child_process').exec;
 
 var EventEmitter = require('events').EventEmitter;
+var Value = require('./value.js').Value
 
-
-var Devices = function() {
+var Device = function() {
     EventEmitter.call(this);
 
-	that = this;
-	this.devicesJson = {};
-	this.devices = []
-        	
-	var listen = function(){
-		fs.watch('/DeviceList.xml', function (curr, prev) {                                      
-			that.fetchDevices();
-		});
-	}
-	    	
-	var fetchDevices = function(){
-		exec("/www/setdevice cmd=list",function(error, stdout, stderr){
-			that.updateDevices(stdout);
-		})
-	}
+	var that = this;
+	this.deviceJson = {};
 
-	var updateDevices = function(devicesJson){
-		this.devicesJson = JSON.parse(devicesJson)
-		for( var key in this.devicesJson){
-			var deviceJson = this.devicesJson[key]
-			var device = this.getDevice(deviceJson.DeviceID)
-			if( !device )
-				
+	// Should this be private?
+	this.values = [];
 
+	this.updateDevice = function(deviceJson){
+		this.deviceJson = deviceJson;
+
+		this.id = deviceJson.DeviceID;
+		this.name = deviceJson.Name;
+		this.type = deviceJson.DeviceType;
+		this.location = deviceJson.Location;
+
+		var values = deviceJson.DeviceValues;
+
+		var change = false;
+		for( var i in values){
+			var valueJson = values[i];
+			var value = this.getValue(valueJson.index)
+
+			if( !value ){
+				value = new Value(this);
+				this.values.push(value);
+			}
+
+			change = value.updateValue(valueJson) || change
 		}
-		this.emit('change', this.devices)
-	}
 
-	this.getDevice = function(id){
-		for( var i = 0; i < this.devices.length; i++){
-			var device = this.devices[i]
-			if (device.DeviceID == id)
-				return device
+		if(change){
+			this.emit('change', this)
+			return true
+		}else{
+			return false
 		}
 	}
 
-	this.getDevices = function(){
-		console.log()
+	this.get = function(key, index){
+		if(key == 'value')
+			return this.getValue(index)
+		else
+			return this[key]
 	}
-	
-	this.listen()
-}
-util.inherits(Devices, EventEmitter);
 
-var emitFunction = function(devicesJson){
-	//console.log(devicesJson)
-	console.log('Device Update!')
-	
-}
+	this.getValue = function(index){
+		for( var i = 0; i < this.values.length; i++){
+			var value = this.values[i]
+			if (value.index == index)
+				return value
+		}
+	}
 
-var devices = new Devices();
-devices.on('change', emitFunction)
+	this.set = function(key, val, valVal){
+		if(key == 'value')
+			return this.setValue(val, valVal)
+		else{
+			var old = this[key]
+			if( old != val){
+				//This needs to be changed too
+				this[key] = val
+				this.emit('change', this)
+				return true
+			}else
+				return false
+		}
+	}
+
+	this.setValue = function(index, val){
+		var value = this.getValue(index)		
+		value.set('value', val)
+	
+	}
+
+	this.getValues = function(id){
+		return this.values;
+	}
+}
+util.inherits(Device, EventEmitter);
+
+module.exports.Device = Device;
+
+

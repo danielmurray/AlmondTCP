@@ -90,11 +90,17 @@ AlmondFS.prototype.buildPath = function(remoteFilePath, callback){
 		    exit: function(code, stdout, stderr){
 				if( code ){
 					// err
-					// console.log('We Need to Go Deeper')
-					that.buildPath(pathUpTo, function(){
-						that.buildPath(remoteFilePath, callback)
-					})
-
+					if( stderr.indexOf("File exists") > 0 ){
+						// Parent dir already exists, just copy file over
+						if(callback)
+							callback()
+					}else{
+						// Parent dir already exists, just copy file over
+						// console.log('We Need to Go Deeper')
+						that.buildPath(pathUpTo, function(){
+							that.buildPath(remoteFilePath, callback)
+						})
+					}
 				}else{
 					//success
 					console.log('Remote$ mkdir', pathUpTo);
@@ -120,20 +126,24 @@ AlmondFS.prototype.diffRemoteFile = function(localFilePath, localFileText){
 	});
 
 	ssh.exec('cat '+ remoteFilePath, {
-		err: function(stderr){
-			console.log(remoteFilePath, '--- NO PATH')
-			that.buildPath(remoteFilePath, function(){
-				that.update(localFilePath, remoteFilePath)
-			})
-	        ssh.end()
-		},
-	    out: function(remoteFileText){
-	        if( localFileText !== remoteFileText){
-	        	console.log(remoteFilePath, '--- DIFF')
-	        	that.update(localFilePath, remoteFilePath)
-	        } else {
-	        	console.log(remoteFilePath, '--- OK')
-	        }
+		exit: function(code, stdout, stderr){
+			if( code ){
+				// err
+				console.log(remoteFilePath, '--- Doesn\'t Exist')
+				that.buildPath(remoteFilePath, function(){
+					that.update(localFilePath, remoteFilePath)
+				})
+			}else{
+				//success
+				var remoteFileText = stdout
+				if( localFileText !== remoteFileText){
+		        	console.log(remoteFilePath, '--- DIFF')
+		        	that.update(localFilePath, remoteFilePath)
+		        } else {
+		        	console.log(remoteFilePath, '--- OK')
+		        }
+			}
+
 	        ssh.end()
 		}
 	}).start();
