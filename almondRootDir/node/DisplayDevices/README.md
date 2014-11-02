@@ -1,7 +1,7 @@
-# chat-example
+Alright this is a web page that displays all the devices/ their value.
+	It basically takes the DeviceList.json file and spits out the data.
+	As of now it updates changes to DeviceList every second, however I will
+	change it so that it only triggers on the devices callback.
 
-This is the source code for a very simple chat example used for 
-the [Getting Started](http://socket.io/get-started/chat/) guide 
-of the Socket.IO website.
-
-Please refer to it to learn how to run this application.
+	Start server with node index.js
+	go to localhost port 1337
