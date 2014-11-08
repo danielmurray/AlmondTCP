@@ -89,17 +89,41 @@ var Devices = function() {
 }
 util.inherits(Devices, EventEmitter);
 
+var devicesReady = function(devices){
+
+	var devicetoggle = function(deviceID, nextDeviceID){
+		var device = devices.getDevice(deviceID)
+		var nextDevice = devices.getDevice(deviceID)
+		var state = device.getValue(2).get('value')
+
+		console.log(state)
+		if(state == 'true'){
+			device.setValue(2,false)
+		}else{
+			nextDevice.setValue(2,true)
+		}
+		setTimeout(function() {
+		  devicetoggle(nextDeviceID, deviceID)
+		}, 200);
+	}
+
+	devicetoggle(9,12)
+
+
+}
+
 var devicesReady = function(){
-	var loLAMP = devices.getDevice(4)
 	var motion = devices.getDevice(7)
-
-
-	motion.on('change', function(device){
-		var value = device.get('value', 1);
-		if(value.value == 'true' )
-			loLAMP.set('value', 2, true)
-		else
-			loLAMP.set('value', 2, false)
+	var loLamp = devices.getDevice(9)
+	motion.on('change',function(device){
+		console.log(device.getValue(1).get('value'))
+		var value = device.getValue(1).get('value')
+		if( value == 'true'){
+			loLamp.setValue(2, true)
+		}else{
+			console.log('hello')
+			loLamp.setValue(2, false)
+		}
 	})
 }
 

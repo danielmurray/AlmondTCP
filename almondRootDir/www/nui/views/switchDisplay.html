@@ -1,0 +1,50 @@
+<% 
+    var deviceID = device.id
+    var valueID = 'device' + deviceID + 'value' + value.id
+
+    valueAttrs = value.getAttr('_value')
+    states = valueAttrs.states
+    
+    if(value.get('value')){
+        onSelected = 'selected'
+        offSelected = ''
+    }else{
+        onSelected = ''
+        offSelected = 'selected'
+    }
+
+    var color = device.getColor()
+%>
+
+<style>
+    #<%=valueID%> .displayValue{
+        background-color    :<%= color %>;
+        color               :<%= color %>;
+    }
+    
+    #<%=valueID%> .onSwitch.waitingOnCallBack{
+        background-color    :<%= device.valueColor(1,0.6) %>;
+    }
+    #<%=valueID%> .onSwitch.selected{
+        background-color    :<%= device.valueColor(1,1) %>;
+    }
+    
+    #<%=valueID%> .offSwitch.waitingOnCallBack{
+        background-color    :<%= device.valueColor(0,0.6) %>;
+    }
+    #<%=valueID%> .offSwitch.selected{
+        background-color    :<%= device.valueColor(0,1) %>;
+    }
+</style>
+
+<div class='displayValue'>
+    <div class='deviceSwitch'>
+        <div class='onSwitch switchOption <%=onSelected%>'>
+            <span class='switchText'>On</span>
+        </div>
+        <div class='offSwitch switchOption <%=offSelected%>'>
+            <span class='switchText'>Off</span>
+        </div>
+    </div>
+</div>
+

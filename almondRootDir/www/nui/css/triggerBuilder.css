@@ -1,0 +1,191 @@
+.whenThenTaskbar{
+	height: 100px;
+	margin: 0 0 5px 0;
+}
+
+.whenThenWrapper,
+.triggerGroupEdit,
+.actoinButtonWrapper{
+	float: left;
+}
+
+.whenThenWrapper{
+	position: relative;
+
+   	height: 100px;
+	width: 160px;
+	font-size: 40px;
+	line-height: 40px;
+	font-family: 'Segoe UI Bold';
+
+	text-align: center;
+	margin: 0 5px 0 0;
+
+	cursor: pointer;
+}
+
+.whenThenWrapper:hover{
+	background-color: #333333;
+}
+
+.whenThenWrapper .orSpan{
+	position: absolute;
+	top: 20px;
+	left: 10px;
+	opacity:.5;
+
+}
+
+.whenThenWrapper .whenSpan{
+	position: absolute;
+	bottom: 5px;
+	left: 10px;
+}
+
+.whenThenWrapper .thenSpan{
+	position: absolute;
+	bottom: 5px;
+	left:27px;
+}
+
+.whenThenWrapper .ellipsisSpan{
+	position: absolute;
+	bottom: 5px;
+	right:5px;
+}
+
+.whenThenWrapper .ellipsisSpan.hover{
+	color: whitesmoke;
+}
+
+.triggerGroupEdit{
+	height:90px;
+	width: 797px;
+	padding: 5px 10px 5px 10px;
+	margin: 0 0 0 0;
+
+	overflow: hidden;
+	overflow-x:scroll;
+}
+
+.triggerGroupEdit::-webkit-scrollbar{
+	display:none;
+}
+
+.triggerEditWrapper{
+	width: 160px;
+}
+
+.triggerNewWrapperContainer{
+	width: 200px;
+}
+
+.andWrapper,
+.triggerEditWrapper,
+.andNewWrapper,
+.triggerNewWrapper{
+	float: left;
+	
+}
+
+.andWrapper,
+.andNewWrapper{
+	font-size: 40px;
+	line-height: 40px;
+	padding:0 10px 0 10px;
+}
+
+.andNewWrapper{
+	padding:20px 10px 0 10px;
+}
+
+.triggerEditWrapperCell{
+	background-color: black;
+}
+
+.triggerEditWrapper,
+.triggerNewWrapper{
+	cursor: pointer;
+	opacity: 1;
+}
+
+.triggerEditWrapper:hover{
+	opacity: .75;
+}
+
+.triggerEditIconWrapper,
+.triggerNewIconWrapper{
+	position: relative;
+	float: left;
+	height: 80px;
+	width: 80px;
+	margin: 0 0 0 0;
+}
+
+.triggerDescriptionEdit{
+	display: table-cell;
+	
+	height: 70px;
+	width: 70px;
+	padding: 5px;
+	
+	color:whitesmoke;
+	
+	text-align: center;
+	vertical-align: middle;
+}
+
+.triggerEditIcon,
+.triggerNewIcon{
+	position: absolute;
+	top: 0px;
+	left: 5px;
+	height: 70px;
+	width: 70px;
+}
+
+.triggerEditIconText,
+.triggerNewIconText{
+	position: absolute;
+	bottom: -1px;
+	left: 3px;
+	text-align: center;
+
+	width: 90%;
+	font-size: 13px;
+	line-height: 25px;
+	
+	color: white;
+}
+
+.verticalSeperator{
+	height: 70px;
+	float: right;
+	width: 2px;
+	background-color: white;
+	margin: 5px 0;
+}
+
+.triggerNewWrapperContainer{
+	cursor: pointer;
+	opacity: 0.3;
+}
+
+.triggerNewWrapperContainer:hover{
+	opacity: .75;	
+}
+
+.triggerNewWrapper{
+	background-color: black;
+}
+
+.triggerNewIcon{
+	position: absolute;
+	top: 10px;
+	left: 17px;
+	height: 45px;
+	width: 45px;
+}
+
+.triggerNewIconText{
+}

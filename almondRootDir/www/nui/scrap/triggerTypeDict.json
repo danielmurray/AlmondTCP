@@ -1,0 +1,34 @@
+{
+	"binary": {
+		"false"	: {
+			"id"			: "off",
+			"displayText" 	: "Off",
+			"icon"			: "icon_switchOff"
+		},
+		"true"	: {
+			"id"			: "on",
+			"displayText" 	: "On",
+			"icon"			: "icon_switchOn"
+		}
+	},
+	"analog":{
+		"lessthan"		: {
+			"id"			: "lessthan",
+			"text"			: "less than",
+			"displayText" 	: "Less Than",
+			"icon"			: "icon_lessThan"
+		},
+		"greaterthan"	: {
+			"id"			: "greaterthan",
+			"text"			: "greater than",
+			"displayText" 	: "Greater Than",
+			"icon"			: "icon_greaterThan"
+		},
+		"equalto"		: {
+			"id"			: "equalto",
+			"text"			: "equal to",
+			"displayText" 	: "Equal To",
+			"icon"			: "icon_equalTo"
+		}
+	}
+}

@@ -1,0 +1,372 @@
+.deviceIcon{
+    position: relative;
+    display:table;
+    float:left;
+    height:100%;
+    width:100%;
+}
+
+.deviceName{
+    color: whitesmoke;
+    position: absolute;
+    bottom:15px;
+    font-size: 30px;
+    line-height: 30px;
+
+    width:100%;
+    
+    display:table-cell;
+    vertical-align:middle;
+    text-align:center;
+}
+
+/*-------------------Image sprites--------------------*/
+
+.iconSprite {
+    position: relative;
+    outline:none;
+    margin: auto;
+    height: 100px;
+    width: 100px;
+    margin-top:15px;
+}
+
+.icon_switchOff {
+    display: block;
+    height: 100px;
+    width: 100px;
+    background:url(../img/sensors_sprite.png) no-repeat 0 0px;
+}
+
+.icon_switchOn {
+    display: block;
+    height: 100px;
+    width: 100px;
+    background:url(../img/sensors_sprite.png) no-repeat 0 -100px;
+}
+
+.icon_retry {
+    display: block;
+    height: 100px;
+    width: 100px;
+    background:url(../img/sensors_sprite.png) no-repeat 0 -200px;
+}
+
+.icon_doorClose {
+    display: block;
+    height: 100px;
+    width: 100px;
+    background:url(../img/sensors_sprite.png) no-repeat 0 -300px;
+}
+
+.icon_doorOpen {
+    display: block;
+    height: 100px;
+    width: 100px;
+    background:url(../img/sensors_sprite.png) no-repeat 0 -400px;
+}
+
+.icon_settings {
+    opacity: 0.4;
+    display: block;
+    height: 100px;
+    width: 100px;
+    background:url(../img/sensors_sprite.png) no-repeat 0 -500px;
+}
+
+.icon_settings_a {
+    display: block;
+    height: 100px;
+    width: 100px;
+    background:url(../img/sensors_sprite.png) no-repeat 0 -600px;
+}
+
+.icon_triagUp {
+    display: block;
+    height: 100px;
+    width: 100px;
+    background:url(../img/sensors_sprite.png) no-repeat 0 -700px;
+}
+
+.icon_triagDown {
+    display: block;
+    height: 100px;
+    width: 100px;
+    background:url(../img/sensors_sprite.png) no-repeat 0 -800px;
+}
+
+.icon_bright {
+    display: block;
+    height: 100px;
+    width: 100px;
+    background:url(../img/sensors_sprite.png) no-repeat 0 -900px;
+}
+
+.icon_dim {
+    display: block;
+    height: 30px;
+    width: 30px;
+    background:url(../img/sensors_sprite.png) no-repeat -35px -1035px;
+}
+
+.icon_midBright {
+    display: block;
+    height: 40px;
+    width: 40px;
+    background:url(../img/sensors_sprite.png) no-repeat -30px -1131px;
+}
+
+.icon_check {
+    display: block;
+    height: 100px;
+    width: 100px;
+    background:url(../img/sensors_sprite.png) no-repeat 0 -1200px;
+}
+
+.icon_active {
+    display: block;
+    height: 100px;
+    width: 100px;
+    background:url(../img/sensors_sprite.png) no-repeat 0 -1300px;
+}
+
+.icon_inactive {
+    display: block;
+    height: 100px;
+    width: 100px;
+    background:url(../img/sensors_sprite.png) no-repeat 0 -1400px;
+}
+
+.icon_bulbOn {
+    display: block;
+    height: 100px;
+    width: 100px;
+    background:url(../img/sensors_sprite.png) no-repeat 0 -1500px;
+}
+
+.icon_bulbOff {
+    display: block;
+    height: 100px;
+    width: 100px;
+    background:url(../img/sensors_sprite.png) no-repeat 0 -1600px;
+}
+
+.icon_wait {
+    display: block;
+    height: 100px;
+    width: 100px;
+    background:url(../img/sensors_sprite.png) no-repeat 0 -1700px;
+}
+
+.icon_slidedown {
+    display: block;
+    height: 20px;
+    width: 20px;
+    background:url(../img/sensors_sprite.png) no-repeat 0 -1800px;
+}
+
+.icon_slideup {
+    display: block;
+    height: 20px;
+    width: 20px;
+    background:url(../img/sensors_sprite.png) no-repeat 0 -1820px;
+}
+
+.icon_smallCross {
+    display: block;
+    height: 20px;
+    width: 20px;
+    background:url(../img/sensors_sprite.png) no-repeat 0 -1840px;
+}
+
+.icon_edit {
+    display: block;
+    height: 20px;
+    width: 20px;
+    background:url(../img/sensors_sprite.png) no-repeat 0 -1880px;
+}
+
+.icon_userBlocked {
+    display: block;
+    height: 100px;
+    width: 100px;
+    background:url(../img/sensors_sprite.png) no-repeat 0 -1900px;
+}
+
+
+.icon_userConnected {
+    display: block;
+    height: 100px;
+    width: 100px;
+    background:url(../img/sensors_sprite.png) no-repeat 0 -2000px;
+}
+
+.icon_save {
+    display: block;
+    height: 100px;
+    width: 100px;
+    background:url(../img/sensors_sprite.png) no-repeat 0 -2100px;
+}
+
+.icon_unsupported {
+    display: block;
+    height: 100px;
+    width: 100px;
+    background:url(../img/sensors_sprite.png) no-repeat 0 -2200px;
+}
+
+.icon_more {
+    opacity: 0.4;
+    display: block;
+    height: 100px;
+    width: 100px;
+    background:url(../img/sensors_sprite.png) no-repeat 0 -2300px;
+}
+
+.icon_window {
+    display: block;
+    height: 100px;
+    width: 100px;
+    background:url(../img/sensors_sprite.png) no-repeat 0 -2400px;
+}
+
+.icon_move {
+    display: block;
+    height: 100px;
+    width: 100px;
+    background:url(../img/sensors_sprite.png) no-repeat 0 -2500px;
+}
+
+.icon_stop {
+    display: block;
+    height: 100px;
+    width: 100px;
+    background:url(../img/sensors_sprite.png) no-repeat 0 -2600px;
+}
+
+.icon_shade {
+    display: block;
+    height: 100px;
+    width: 100px;
+    background:url(../img/sensors_sprite.png) no-repeat 0 -2700px;
+}
+
+.icon_locked {
+    display: block;
+    height: 100px;
+    width: 100px;
+    background:url(../img/sensors_sprite.png) no-repeat 0 -2800px;
+}
+
+.icon_unlocked {
+    display: block;
+    height: 100px;
+    width: 100px;
+    background:url(../img/sensors_sprite.png) no-repeat 0 -2900px;
+}
+
+.icon_alarmoff {
+    display: block;
+    height: 100px;
+    width: 100px;
+    background:url(../img/sensors_sprite.png) no-repeat 0 -3000px;
+}
+
+.icon_alarmon {
+    display: block;
+    height: 100px;
+    width: 100px;
+    background:url(../img/sensors_sprite.png) no-repeat 0 -3100px;
+}
+
+.icon_nomotion {
+    display: block;
+    height: 100px;
+    width: 100px;
+    background:url(../img/sensors_sprite.png) no-repeat 0 -3200px;
+}
+
+.icon_inmotion {
+    display: block;
+    height: 100px;
+    width: 100px;
+    background:url(../img/sensors_sprite.png) no-repeat 0 -3300px;
+}
+
+.icon_fire {
+    display: block;
+    height: 100px;
+    width: 100px;
+    background:url(../img/sensors_sprite.png) no-repeat 0 -3400px;
+}
+
+.icon_firewarning {
+    display: block;
+    height: 100px;
+    width: 100px;
+    background:url(../img/sensors_sprite.png) no-repeat 0 -3500px;
+}
+
+.icon_keyfoboff {
+    display: block;
+    height: 100px;
+    width: 100px;
+    background:url(../img/sensors_sprite.png) no-repeat 0 -3600px;
+}
+
+.icon_keyfobon {
+    display: block;
+    height: 100px;
+    width: 100px;
+    background:url(../img/sensors_sprite.png) no-repeat 0 -3700px;
+}
+
+.icon_mulswitchon {
+    background:url(../img/sensors_sprite.png) no-repeat 0 -3800px;
+}
+
+.icon_mulswitchoff {
+    background:url(../img/sensors_sprite.png) no-repeat 0 -3900px;
+}
+
+.icon_thermostat {
+    display: block;
+    height: 100px;
+    width: 100px;
+    background:url(../img/sensors_sprite.png) no-repeat 0 -4000px;
+}
+
+.icon_water {
+    display: block;
+    height: 100px;
+    width: 100px;
+    background:url(../img/sensors_sprite.png) no-repeat 0 -4100px;
+}
+
+.icon_flooding {
+    display: block;
+    height: 100px;
+    width: 100px;
+    background:url(../img/sensors_sprite.png) no-repeat 0 -4200px;
+}
+
+.icon_vibrating {
+    display: block;
+    height: 100px;
+    width: 100px;
+    background:url(../img/sensors_sprite.png) no-repeat 0 -4300px;
+}
+
+.icon_sensoroff {
+    display: block;
+    height: 100px;
+    width: 100px;
+    background:url(../img/sensors_sprite.png) no-repeat 0 -4400px;
+}
+
+.icon_sensoron {
+    display: block;
+    height: 100px;
+    width: 100px;
+    background:url(../img/sensors_sprite.png) no-repeat 0 -4500px;
+}

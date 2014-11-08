@@ -1,0 +1,29 @@
+<% 
+	var deviceID = device.get('id')
+	var iconId = 'device' + deviceID + 'icon'
+	var infoId = 'device' + deviceID + 'info'
+	var displayValueIndices = device.getAttr('_displayValues')
+	var color = device.getColor()
+%>
+
+
+<div class='deviceWrapper'>
+	<div class='deviceTop'>
+		<div id=<%=iconId%> class='deviceIconWrapper'></div>
+		<div class='displayValues'>
+<%
+	for(var i = 0; i < displayValueIndices.length; i++){
+		var displayValueIndex = displayValueIndices[i]
+		var valueId = 'device' + deviceID + 'value' + displayValueIndex
+%>
+			<div id=<%=valueId%> class='displayValueWrapper'></div>
+<%
+	}
+%>
+		</div>
+	</div>
+	<div class='deviceBottom'>
+		<div id=<%=infoId%> class='deviceTableWrapper'>
+		</div>
+	</div>
+</div>

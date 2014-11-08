@@ -1,0 +1,162 @@
+<%
+	var ruleStatus = rule.get('status')
+	if(ruleStatus > 0){
+		var backgroundColor = "whitesmoke"
+		var color = "rgba(0, 0, 0, 0.75)"
+		var opacity = 1
+		var deleteIcon = 'deleteBlack'
+		var editIcon = 'editBlack'
+		var saveIcon = 'saveBlack'
+
+	}else{
+		var backgroundColor = "rgba(0, 0, 0, 0.75)"
+		var color = "whitesmoke"
+		var opacity = 0.8
+		var deleteIcon = 'deleteWhite'
+		var editIcon = 'editWhite'
+		var saveIcon = 'saveWhite'
+	}
+%>
+
+<style>
+	#rule<%=rule.id%> .prettyBox{
+		background-color: <%=backgroundColor%>;
+		color: <%=color%>;
+		opacity: <%=opacity%>;
+	}
+</style>
+
+<div id='rule<%=rule.id%>'>
+	<div class='ruleHeader prettyBox'>
+		<div class="graphicWrapper">
+			<table class="graphicTable">
+			<tr>
+	<%
+		var ruleStatus = rule.get('status')
+		var triggerGroupsJSON = rule.get('triggerGroups')
+		for(var i=0; i < triggerGroupsJSON.length; i++){
+			var triggerGroupJSON = triggerGroupsJSON[i]
+			var triggerGroupId = triggerGroupJSON.id
+			var triggerGroup = triggerGroups.get(triggerGroupId)
+			if(i > 0){
+	%>			<td>
+				<div class='orWrapper'>
+					or
+				</div>
+				</td>
+	<%
+			}
+	%>
+			<%
+				var triggersJSON = triggerGroup.get('triggers')
+				for(var j=0; j < triggersJSON.length; j++){
+					var triggerJSON = triggersJSON[j]
+					var triggerId = triggerJSON.id
+					var trigger = triggers.get(triggerId)
+					var triggerIcon = trigger.getIcon()
+			%>
+				<td>
+				<style>
+					.graphicWrapper #trigger<%=triggerId%>{
+					    background-color    :<%= triggerIcon.color %>;
+					}
+				</style>
+				<div id='trigger<%=triggerId%>' class='triggerIconWrapper'>
+					<img  class="triggerIcon" src="/nui/sensorimg/<%=triggerIcon.icon%>.png">
+					<div class="triggerIconText">
+						<%= triggerIcon.text %>
+					</div>
+				</div>
+				</td>
+
+			<%
+				}
+			%>
+	<%
+		}
+	%>	
+				<td>
+				<div class='thenArrowWrapper'>
+					<div class='thenArrow'>
+						↦
+					</div>
+				</div>
+				</td>
+
+				
+				<!-- <div class='resultWrapper'> -->
+	<%
+		var resultsJSON = rule.get('results')
+		for(var i=0; i < resultsJSON.length; i++){
+			var resultJSON = resultsJSON[i]
+			var resultId = resultJSON.id
+			var result = results.get(resultId)
+			var resultIcon = result.getIcon()
+
+	%>
+					<style>
+						#result<%=resultId%>{
+						    background-color    :<%= resultIcon.color %>;
+						}
+					</style>
+					<td>
+					<div id='result<%=resultId%>' class='resultIconWrapper'>
+						<img  class="resultIcon" src="/nui/sensorimg/<%=resultIcon.icon%>.png">
+						<div class="resultIconText">
+							<%= resultIcon.text %>
+						</div>
+					</div>
+					</td>
+	<%
+		}
+	%>
+				<!-- </div> -->
+			</tr>
+			</table>
+		</div>
+		<div class="switchWrapper">
+<%
+if(ruleStatus){
+%>
+			<div class="onSwitch ruleSwitch">
+				ON
+			</div>
+<%
+}else{
+%>
+			<div class="offSwitch ruleSwitch">
+				OFF
+			</div>
+<%
+}
+%>
+		</div>
+	</div>
+	<%
+		if(!edit){
+	%>
+	<table class="ruleTaskbar">
+		<tr>
+			<td class="ruleTextWrapper">
+				<div class="ruleText prettyBox">
+					<%=rule.get('name')%>
+				</div>
+			</td>
+			<td>
+				<div class="actionButton prettyBox">
+					<div class="editWrapper">
+						<div class="editText">
+							Edit
+						</div>
+						<img  class="editIcon" src="/nui/sensorimg/<%=editIcon%>.png">	
+					</div>
+				</div>
+			</td>
+		</tr>
+	</table>
+	<%
+		}
+	%>
+
+	
+</div>

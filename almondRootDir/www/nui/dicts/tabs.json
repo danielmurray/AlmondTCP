@@ -1,0 +1,18 @@
+{
+    "router": {
+        "id": "router",
+        "name": "Router"
+    },
+    "devices": {
+		"id": "devices",
+        "name": "Devices"
+    },
+    "rules": {
+    	"id": "rules",
+        "name": "Rules"
+    },
+    "advanced": {
+        "id": "advanced",
+        "name": "Advanced"
+    }
+}

@@ -1,0 +1,65 @@
+[{
+	"id": 0,
+	"name": "Don't Waste Cold Air",
+	"status": 1,
+	"triggergroups": [{
+		"id": 0,
+		"name": "Window Open AC On",
+		"triggers":[{	
+			"type": "device",
+			"name": "Window Open",
+			"devId": 6,
+			"valueIndex": 1,
+			"value":1
+		},{
+			"type": "device",
+			"name": "AC On",
+			"devId": 10,
+			"valueIndex": 1,
+			"value":1
+		}]
+	},{
+		"id": 1,
+		"name": "Weekday Morning",
+		"triggers":[{	
+			"type": "time",
+			"name": "Weekday Morning",
+			"year": "*",
+			"month": "*",
+			"week": "1-5",
+			"day": "8",
+			"hour": "30"
+		}]
+	}],
+	"results":[{
+		"type": "device",
+		"name": "AC Off",
+		"devId": 10,
+		"valueIndex": 1,
+		"value": 0
+	}]
+},{
+	"id": 1,
+	"name": "Weekday Wakeup",
+	"status": 0,
+	"triggergroups": [{
+		"id": 1,
+		"name": "Weekday Morning",
+		"triggers":[{	
+			"type": "time",
+			"name": "Weekday Morning",
+			"year": "*",
+			"month": "*",
+			"week": "1-5",
+			"day": "8",
+			"hour": "30"
+		}]
+	}],
+	"results":[{
+		"type": "device",
+		"name": "Light On",
+		"devId": 10,
+		"valueIndex": 1,
+		"value": 1
+	}]
+}]

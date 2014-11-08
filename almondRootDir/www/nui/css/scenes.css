@@ -1,0 +1,9 @@
+.scenesWrapper{
+	width: 100%;
+	background-color: whitesmoke;
+	min-height: 450px;
+	box-shadow: 0 1px 1px #888888;
+	-ms-overflow: hidden;
+	overflow: hidden;
+	padding-bottom: 20px;
+}

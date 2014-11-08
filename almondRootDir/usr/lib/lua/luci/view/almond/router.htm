@@ -1,0 +1,472 @@
+    <%#
+LuCI - Lua Configuration Interface
+Copyright 2008 Steven Barth <steven@midlink.org>
+Copyright 2008-2010 Jo-Philipp Wich <xm@subsignal.org>
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+	http://www.apache.org/licenses/LICENSE-2.0
+
+$Id: header.htm 7780 2011-10-26 00:27:00Z jow $
+
+-%>
+<%
+	local sys  = require "luci.sys"
+	local http = require "luci.http"
+	local disp = require "luci.dispatcher"
+	
+	local util = require "luci.util"	
+	local uciparm = require "uci"
+	local curs = uciparm.cursor()
+	local tilevalues = {}
+	tilevalues.internettype = curs:get("network","wan","proto")
+	tilevalues.wanip = util.exec("uci -P/var/state get network.wan.ipaddr")
+	tilevalues.lanip = util.exec("uci -P/var/state get network.lan.ipaddr")
+	tilevalues.clientcount = util.exec("ip -s neigh |grep -i br |grep -i reach |wc -l")
+	tilevalues.dhcpclientcount = util.exec("cat /tmp/dhcp.leases |wc -l")
+	tilevalues.wirelessbgnssid = curs:get("wireless","wlan10","ssid")
+	tilevalues.wirelessbgnencryption = curs:get("wireless","wlan1","encryption")
+	tilevalues.wirelessbgnchannel = curs:get("wireless","wlan1","channel")   
+	tilevalues.wirelessbgnauth = curs:get("wireless","wlan1","auth")      
+	tilevalues.wirelessacssid = curs:get("wireless","wlan00","ssid")
+	tilevalues.wirelessacencryption = curs:get("wireless","wlan0","encryption")
+	tilevalues.wirelessacchannel = curs:get("wireless","wlan0","channel")
+    tilevalues.wirelessacauth = curs:get("wireless","wlan0","auth")
+	tilevalues.bgnchannel = curs:get("wireless","wlan1","channel")
+    tilevalues.acchannel = curs:get("wireless","wlan0","channel")
+	tilevalues.uptime = tostring(luci.sys.uptime())      
+	tilevalues.wifibgmac = util.exec("ip link show wlan10 | awk '/ether/ {print $2}'")
+	tilevalues.wifiac = util.exec("ip link show wlan00 | awk '/ether/ {print $2}'")
+	tilevalues.lanmac = util.exec("ip link show eth1 | awk '/ether/ {print $2}'")
+	tilevalues.wanmac = util.exec("ip link show eth0 | awk '/ether/ {print $2}'") 
+	tilevalues.almondversion = util.exec("cat /almond/version") 
+
+        local portnum = luci.http.getenv("SERVER_PORT")
+        local function uptimee()
+           time = luci.sys.uptime()                           
+           tilevalues.seconds = tostring(time%60)                   
+           tilevalues.mins = tostring(math.floor(time/60)%60)       
+           tilevalues.hours = tostring(math.floor(time/60/60)%24)                      
+           tilevalues.days = tostring(math.floor(time/60/60/24)) 
+           
+        end 
+        uptimee() 
+         
+	local hostname = sys.hostname()
+	local load1, load5, load15 = sys.loadavg()
+
+	local request  = disp.context.path
+	local request2 = disp.context.request
+
+	local category = request[1]
+	local cattree  = category and disp.node(category)
+
+	local leaf = request2[#request2]
+
+	local tree = disp.node()
+	local node = disp.context.dispatched
+
+	local categories = disp.node_childs(tree)
+
+	local c = tree
+	local i, r
+
+	-- tag all nodes leading to this page
+	for i, r in ipairs(request) do
+		if c.nodes and c.nodes[r] then
+			c = c.nodes[r]
+			c._menu_selected = true
+		end
+	end
+
+	
+
+	local function nodeurl(prefix, name, query)
+		local url = controller .. prefix .. name .. "/"
+		if query then
+			url = url .. http.build_querystring(query)
+		end
+		return pcdata(url)
+	end
+%>
+
+<link rel="stylesheet" type="text/css" media="screen" href="/luci-static/cortina/home_webui.css"/>
+<link rel="stylesheet" type="text/css" media="all" href="/luci-static/cortina/jquery-ui.css">
+
+<div id="tab2" class="tab_content">
+	<div id="pattern">
+		<div class="internet">
+			<a title="" id="myid" href="<%=luci.dispatcher.build_url("admin/network/network/wan/")%>">
+				<div class="padding">
+					<div class="icon">
+						<img id="internet_icon" src="/luci-static/cortina/images/internet_icon.png" width="67" height="65" />
+					</div>
+					<h1>Internet</h1>
+					<p class="index">
+						<span id="InternetType">Type : <b style="text-transform:uppercase; font-weight:normal;">
+							<%=tilevalues.internettype%></b></br>
+							<%=tilevalues.wanip%>
+						</span> 
+					</p>
+				</div>
+			</a>
+		</div>
+		
+		<div class="security" id="security_tile">
+			<a href="<%=luci.dispatcher.build_url("admin/network/wireless/wlan1.network1/")%>" title="">
+				<div class="padding">
+					<div  class="icon">
+						<img id="secId" src="/luci-static/cortina/images/single_band.png" width="60" height="50" />
+					</div>
+					<h1 id="HomeSecurity">Wireless 2.4 GHz</h1>
+					<p class="index" id="wireless_info" style="text-align: left; letter-spacing: 0px; margin: 15px 0px 0px;">
+						SSID : 
+						<b style="font-weight:normal;"><%=tilevalues.wirelessbgnssid%></b>
+						<b style="text-transform:none; font-weight:normal;"></b></br>
+						<b style="font-weight:normal;">Channel</b> : <b style="font-weight:normal;"><%=tilevalues.bgnchannel%></b>
+						<b style="text-transform:none; font-weight:normal;"></b>
+					</p>
+				</div>
+			</a>
+		</div>
+	
+		<div id="Wirelesstip" class="wireless">
+			<a href="<%=luci.dispatcher.build_url("admin/network/wireless/wlan0.network1/")%>">
+				<div class="padding">
+					<div class="icon" >
+						<img src="/luci-static/cortina/images/dual_band.png" width="60" height="50" />
+					</div>
+					<h1 id="HomeWireless">Wireless 5 GHz</h1>
+					<p class="index" id="wireless_info" style="text-align: left; letter-spacing: 0px; margin: 15px 0px 0px;">
+						SSID : 
+						<b style="font-weight:normal;"><%=tilevalues.wirelessacssid%></b>
+						<b style="text-transform:none; font-weight:normal;"></b></br>
+						<b style="font-weight:normal;">Channel</b> : <b style="font-weight:normal;"><%=tilevalues.acchannel%></b>
+						<b style="text-transform:none; font-weight:normal;"></b>
+					</p>
+				</div>
+			</a>
+		</div>
+
+		<div class="middle_main">
+			<div class="middle_left">
+				<div id="Lantip" href="" class="tiptip" title="" style="float:left;">
+
+					<div class="dhcp" onmouseover="document.getElementById('div4').style.display = 'block';" onmouseout="document.getElementById('div4').style.display = 'none';">
+						<a href="<%=luci.dispatcher.build_url("admin/network/network/lan/")%>" title="">
+							<div class="padding">
+								<div class="icon" >
+									<img src="/luci-static/cortina/images/lan_icon.png" width="118" height="39" />
+								</div>
+								<h1 id="HomeNetwork">Network</h1>
+								<p class="index">
+									IP : <%=tilevalues.lanip%></br>
+									DHCP client : <%=tilevalues.dhcpclientcount%>
+									<span id="DhcpClients"></span>
+									<span id="DhcpCount"></span>
+								</p>
+							</div>
+						</a>
+					</div>
+				</div>
+				
+				<div class="add-device">
+					<a href="<%=luci.dispatcher.build_url("admin/system/admin/")%>" title="">
+						<div class="padding">
+							<div  class="logout_icon" align="center">
+								<img src="/luci-static/cortina/images/seting_icon.png" width="81" height="79" style="margin: 5px 0px 0px 0px;" />
+							</div>
+							<p class="heading" style="padding-top: 2px;" id="HomeManagement">Management</p>
+						</div>
+					</a>
+				</div>
+
+				<div class="setup">
+					<a href="<%=luci.dispatcher.build_url("admin/system/flashops/")%>" title="">
+						<div class="padding">
+							<div  class="logout_icon" align="center">
+								<img src="/luci-static/cortina/images/firmware_icon.png" width="67" height="66" style="margin: 5px 5px 0px 0px;" />
+							</div>
+							<p class="heading" id="HomeFirmware">Software</p>
+						</div>
+					</a>
+				</div>
+			</div>
+	
+			<div class="middle_middle">
+				<div class="status">
+					<a href="#" title="">
+						<div class="padding">
+							<div  class="icon">
+								<img src="/luci-static/cortina/images/status_icon.png" width="73" height="69" />
+							</div>
+							<h1 id="HomeStatus">Status</h1>
+							<p> Connected Users : <%=tilevalues.clientcount%></p>
+							<p> Uptime : <%=tilevalues.days%> days <%=tilevalues.hours%> hours <%=tilevalues.mins%> mins <%=tilevalues.seconds%> seconds </p></br>
+							<p> WIFI 2.4GHz MAC :<%=tilevalues.wifibgmac%></p>
+							<p> WIFI 5GHz MAC : <%=tilevalues.wifiac%></p>
+							<p> LAN MAC : <%=tilevalues.lanmac%></p>
+							<p> WAN MAC : <%=tilevalues.wanmac%></p>
+							<p> Firmware Version : <%=tilevalues.almondversion%></p>
+						</div>
+					</a>
+				</div>
+
+
+
+				<div id="div1" class="status" style="background:#0BAEDB; margin-top:-310px; display:none;">
+					<a href="#" title="">
+						<div class="padding">
+							<div  class="icon">
+								<img src="/luci-static/cortina/images/internet_icon.png" width="73" height="69" />
+							</div>
+							<h1 id="HomeStatus" style="display:none;">Status</h1>
+							<p> Connected Users : <%=tilevalues.clientcount%></p>
+							<p> Uptime : <%=tilevalues.days%> days <%=hours%> hours <%=mins%> mins <%=seconds%> seconds </p></br>
+							<p> WIFI 2.4GHz MAC :<%=tilevalues.wifibgmac%></p>
+							<p> WIFI 5GHz MAC : <%=tilevalues.wifiac%></p>
+							<p> LAN MAC : <%=tilevalues.lanmac%></p>
+							<p> WAN MAC : <%=tilevalues.wanmac%></p>
+						</div>
+					</a>
+				</div>
+
+
+				<div id="div2" class="status" style="background:#9AB534; margin-top:-310px;  display:none;">
+					<a href="#" title="">
+						<div class="padding">
+							<div  class="icon">
+								<img src="/luci-static/cortina/images/security_icon_open.png" width="47" height="66" />
+							</div>
+							<h1 id="HomeStatus" style="display:none;">Security Status</h1></br>
+							<% 
+						   local wirelessacencryptionkey = curs:get("wireless","wlan0","wpapsk")
+						   local wirelessbgnencryptionkey = curs:get("wireless","wlan1","wpapsk")
+						   local wirelessbgnnauth = curs:get("wireless","wlan1","auth")      
+						   local wirelessaccauth = curs:get("wireless","wlan0","auth")
+						   local wirelessbgnwepencr = curs:get("wireless","wlan1","encryption")
+						   local wirelessacwepencr = curs:get("wireless","wlan0","encryption")
+						   local wirelessbgnwepencrkeycheck = tostring(curs:get("wireless","wlan1","wep_key"))
+						   local wirelessacwepencrkeycheck = tostring(curs:get("wireless","wlan0","wep_key"))
+							%>
+
+							<h4> 2.4 GHz</h4>
+
+							<%- if wirelessbgnnauth == "wep" then -%>
+							
+								<p>Encryption Type: RC4 </p>
+							
+								<%-if wirelessbgnwepencrkeycheck == "1" then-%>
+									<%local wirelessbgnwepencryptionkey1 = curs:get("wireless","wlan1","key1")%>
+							
+									<p>Encryption Key: <%=wirelessbgnwepencryptionkey1%></p></br>
+							   
+								<%-elseif wirelessbgnwepencrkeycheck == "2" then-%>
+									<% local wirelessbgnwepencryptionkey2 = curs:get("wireless","wlan1","key2")%>
+							
+									<p>Encryption Key: <%=wirelessbgnwepencryptionkey2%></p></br>
+								
+								<%-elseif wirelessbgnwepencrkeycheck == "3" then-%>
+									<% local wirelessbgnwepencryptionkey3 = curs:get("wireless","wlan1","key3")%>
+							
+									<p>Encryption Key: <%=wirelessbgnwepencryptionkey3%></p></br> 
+								
+								<%-else-%>
+									<% local wirelessbgnwepencryptionkey4 = curs:get("wireless","wlan1","key4")%>
+							
+									<p>Encryption Key: <%=wirelessbgnwepencryptionkey4%></p></br>
+								
+								<%-end-%>
+							<%-elseif wirelessbgnnauth == "open" then -%>
+							
+								<p>Encryption Type: None </p>
+								<p>Encryption Key: None </p>
+							
+							<%-else-%>
+							
+								<p>Encryption Type: <%=wirelessbgnwepencr%></p>
+								<p>Encryption Key: <%=wirelessbgnencryptionkey%></p></br>
+							
+							<%-end-%>
+
+							<h4> 5 GHz </h4>
+							
+							<%- if wirelessaccauth == "wep" then -%></p>
+								
+								<p>Encryption Type: RC4 </p>
+								
+								<%- if wirelessacwepencrkeycheck == "1" then-%>
+									<% local wirelessacwepencryptionkey1 = curs:get("wireless","wlan0","key1")%>
+									
+									<p>Encryption Key: <%=wirelessacwepencryptionkey1%></p></br>
+								
+								<%- elseif wirelessacwepencrkeycheck == "2" then-%>
+									<% local wirelessacwepencryptionkey2 = curs:get("wireless","wlan0","key2")%>
+									
+									<p>Encryption Key: <%=wirelessacwepencryptionkey2%></p></br>
+								
+								<%- elseif wirelessacwepencrkeycheck == "3" then-%>
+									<% local wirelessacwepencryptionkey3 = curs:get("wireless","wlan0","key3")%>
+									
+									<p>Encryption Key: <%=wirelessacwepencryptionkey3%></p></br>
+								
+								<%- else-%>
+									<% local wirelessacwepencryptionkey4 = curs:get("wireless","wlan0","key4")%>
+									
+									<p>Encryption Key: <%=wirelessacwepencryptionkey4%></p></br>
+								
+								<%-end-%>
+							<%-elseif wirelessaccauth == "open" then -%>
+								
+								<p>Encryption Type: None </p>
+								<p>Encryption Key: None </p>
+							
+							<%-else-%>
+								
+								<p>Encryption Type: <%=wirelessacwepencr%></p>
+								<p>Encryption Key: <%=wirelessacencryptionkey%></p></br>
+							
+							<%-end-%> 
+
+						</div>
+					</a>
+				</div>
+
+
+				<div id="div3" class="status" style="background:#E4617D; margin-top:-310px;  display:none;">
+					<a href="#" title="">
+						<div class="padding">
+							<div  class="icon">
+								<img src="/luci-static/cortina/images/wire_icon.png" width="73" height="69" />
+							</div>
+							<h1 id="HomeStatus" style="display:none;">Wireless Status</h1></br>
+							<% 
+							local bgnmode = curs:get("wireless","wlan1","hwmode")
+							local acmode = curs:get("wireless","wlan0","hwmode")
+							local bgnchannel = curs:get("wireless","wlan1","channel")
+							local acchannel = curs:get("wireless","wlan0","channel")
+							local bgnssidhide = curs:get("wireless","wlan1","hidden")
+							local acssidhide = curs:get("wireless","wlan0","disabled")
+							local bgnradiostatus =  tonumber(curs:get("wireless","wlan1","disabled"))
+							local acradiostatus = tonumber(curs:get("wireless","wlan0","disabled"))
+							%>
+
+							<h4> 2.4 GHz </h4>
+							<%- if bgnmode == "11NGHT40MINUS" then-%>
+								
+								<p> Wireless Mode :  B/G/N - Mixed </p>
+
+							<%- elseif bgnmode == "11NAHT40MINUS" then-%>
+								
+								<p> Wireless Mode : A/N - Mixed </p>
+
+							<%- else -%>
+								
+								<p> Wireless Mode : A only </p>
+
+							<%-end-%>
+							<p> Channel : <%=bgnchannel%> </p> <br/>
+							
+							<h4> 5 GHz</h4>
+							<%- if acmode == "11ACVHT80" then-%>
+								
+								<p> Wireless Mode :  AC/A/N - Mixed </p>
+
+							<%- elseif acmode == "11NAHT40MINUS" then-%>
+								
+								<p> Wireless Mode : A/N - Mixed </p>
+
+							<%- else -%>
+								
+								<p> Wireless Mode : A only </p>
+
+							<%-end-%>
+							<p> Channel : <%=acchannel%> </p>
+
+						</div>
+					</a>
+				</div>
+
+
+				<div id="div4" class="status" style="background:#F3A52B; margin-top:-310px;  display:none;">
+					<a href="#" title="">
+						<div class="padding">
+							<div  class="icon">
+								<img src="/luci-static/cortina/images/lan_icon.png" width="118" height="39" />
+							</div>
+							<h1 id="HomeStatus" style="display:none;">Network Status</h1></br>
+							<%    
+							local displaycond = tonumber(luci.util.exec("cat /var/dhcp.leases | awk '{print $4}'| wc -l")) 
+							local  dhcpstatus = tonumber(curs:get("dhcp","lan","ignore"))
+
+							if displaycond > 6 then
+								tilevalues.hostname = luci.util.exec("cat /var/dhcp.leases | awk 'NR==1,NR==6{print $4}' ")
+								tilevalues.macaddress = luci.util.exec("cat /var/dhcp.leases | awk 'NR==1,NR==6{print $2}'")
+								tilevalues.ipaddress = luci.util.exec("cat /var/dhcp.leases | awk 'NR==1,NR==6{print $3}'")
+							else
+								tilevalues.hostname = luci.util.exec("cat /var/dhcp.leases | awk '{print $4}'")
+								tilevalues.macaddress = luci.util.exec("cat /var/dhcp.leases | awk '{print $2}'")
+								tilevalues.ipaddress = luci.util.exec("cat /var/dhcp.leases | awk '{print $3}'")
+							end
+							%> 
+
+							<%- if dhcpstatus then  -%>
+								
+								<h4 style="font-weight:normal;"> DHCP server Status = Disabled </h4>   
+							
+							<%- else -%>
+								
+								<h4 style="font-weight:normal;"> DHCP server Status = Enabled </h4>   
+							
+							<%- end -%>
+							<br/>
+							
+							<h4> DHCP Client's List :</h4>
+							<table>
+								<tr style="text-align:left;">
+									<th> MacAddress </th>
+									<th> IPAddress </th>
+								</tr>
+								<tr>
+									<td style="width:150px;"><%=tilevalues.macaddress%></td>
+									<td style="width:150px;"><%=tilevalues.ipaddress%></td>  
+								</tr>
+							</table>
+
+							<%- if displaycond > 6 then -%>
+								<h4 style="text-align:right;float:right; margin-top:-22px;"> and more ... </h4>
+							<%- end -%>
+
+						</div>
+					</a>
+				</div>
+			</div>
+
+			<div class="middle_right">
+				<div class="settings">
+					<a href="basic/add_device.asp" title="">
+						<div class="padding">
+							<div  class="add_d_icon" align="center">
+								<img src="/luci-static/cortina/images/add_d_icon.png" width="111" height="65" style="margin: 10px 10px 0px -10px;" />
+							</div>
+							<p class="heading" id="HomeAddDevice">Add Device</p>
+						</div>
+					</a>
+				</div>
+				<div class="logout">
+					<a href="<%=luci.dispatcher.build_url("admin/logout/")%>" title="Logout">
+						<div class="padding">
+							<div class="logout_icon" align="center">
+								<img src="/luci-static/cortina/images/logout_icon.png" width="60" height="67" style="margin: 5px 5px 0px 0px;"/>
+							</div>
+							<p class="heading" id="HomeLogout">Logout</p>
+						</div>
+					</a>
+				</div>
+			</div>
+			<div class="clear"></div>
+		</div>
+	</div>
+</div>

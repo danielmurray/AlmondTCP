@@ -1,0 +1,26 @@
+<% 
+	var deviceID = device.id
+	var statusObj = device.getAttr('_status')
+	var displayValueIndices = device.getAttr('_displayValues')
+	var color = device.getColor()
+%>
+
+<style>
+	#device<%=deviceID%> .deviceTop{
+	    background-color    :<%= color %>;
+	    color               :<%= color %>;
+	}
+
+	#device<%=deviceID%> .deviceIcon{
+	    background-color    :<%= color %>;
+	    color               :<%= color %>;
+	}
+</style>
+
+<div class='deviceIcon'>
+	<div class="iconSprite icon_<%=statusObj.icon%>">
+	</div>
+	<div class="deviceName">
+		<%= device.getAttr('name') %>
+	</div>
+</div>

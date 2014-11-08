@@ -1,0 +1,152 @@
+.masterContainer {
+  margin: auto;
+  width: 760px;
+}
+
+.headerDiv {
+  width: inherit;
+  height: 80px;
+
+  position:relative;
+}
+
+.headerTitle{
+  display: block;
+  margin: 10px auto;
+  color: black;
+  width: 200px;
+  font: normal 50px 'SegoeUILight';
+  opacity: .8;
+}
+
+.tabsWrapper{
+  position: relative;
+  height: 85px; 
+
+  border-bottom: solid 5px whitesmoke;
+}
+
+.tabs {
+  display: inline;
+  list-style: none;
+  float:left;
+
+  margin: 0;
+  padding: 0;
+}
+
+.tabWrapper{
+  z-index: 10;
+  float: left;
+  width: 85px;
+  height: 85px;
+  text-align: center;
+  opacity: .5;
+  cursor: pointer;
+}
+
+.tabSprite {
+  position: relative;
+  outline:none;
+
+  margin: 9px 9px 0px 9px;
+  width:67px;
+  display: block;
+}
+
+.tabWrapper.active{
+  background-color: whitesmoke;
+  opacity: 1;
+}
+
+.tabWrapper:hover {
+  background-color: whitesmoke;
+}
+
+.tabActive {
+  background-color: whitesmoke;
+  width: 85px;
+  display: block;
+}
+
+.devices {
+  height:48px;
+  width:56px;
+  background:url(../img/tab_sprite.png) no-repeat -2px 0;
+}
+
+.scenes {
+  height:48px;
+  background:url(../img/tab_sprite.png) no-repeat 0 -50px;
+}
+
+.rules {
+  height:48px;
+  background:url(../img/tab_sprite.png) no-repeat 0 -100px;
+}
+
+.router {
+  height:47px;
+  background:url(../img/tab_sprite.png) no-repeat 0 -150px;
+}
+
+.log {
+  height:46px;
+  background:url(../img/tab_sprite2.png) no-repeat 0 -199px;
+}
+
+.advanced{
+  height: 48px;
+  background: url(../img/tab_sprite2.png) no-repeat 0 -250px;
+}
+
+.help {
+    height:48px;
+    background:url(../img/tab_sprite.png) no-repeat 0 -248px;
+}
+
+.contentWrapper {
+  margin: auto;
+  position: relative;
+  display: block;
+  color: #333333;
+}
+
+.footerWrapper {
+  display: block;
+  height: 50px;
+  line-height: 50px;
+  width: 100%;
+
+  position: fixed;
+  bottom: 0;
+
+  font-family: 'Changelling Light';
+  color: #999999;
+}
+
+.footerSecurifi {
+  width: 276px;
+  margin: 0 auto;
+}
+
+.footerWrapper p {
+  float: left;
+  font-size: 12px;
+}
+
+.footerHeader{
+  float: left;
+  font-weight: bold;
+  font-size: 18px;
+  margin: 0px;
+}
+
+.footerLogo{
+  float: left;
+
+  height: 30px;
+  width: 33px;
+
+  margin: 10px 10px 0px 24px;
+}

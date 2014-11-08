@@ -17,6 +17,10 @@ var Device = function() {
 	// Should this be private?
 	this.values = [];
 
+	var change = function(value){
+		that.emit('change', that)
+	}
+
 	this.updateDevice = function(deviceJson){
 		this.deviceJson = deviceJson;
 
@@ -27,24 +31,17 @@ var Device = function() {
 
 		var values = deviceJson.DeviceValues;
 
-		var change = false;
 		for( var i in values){
 			var valueJson = values[i];
-			var value = this.getValue(valueJson.index)
+			var value = this.getValue(valueJson.index);
 
 			if( !value ){
 				value = new Value(this);
+				value.on('change', change);
 				this.values.push(value);
 			}
 
-			change = value.updateValue(valueJson) || change
-		}
-
-		if(change){
-			this.emit('change', this)
-			return true
-		}else{
-			return false
+			value.updateValue(valueJson)
 		}
 	}
 
@@ -81,7 +78,6 @@ var Device = function() {
 	this.setValue = function(index, val){
 		var value = this.getValue(index)		
 		value.set('value', val)
-	
 	}
 
 	this.getValues = function(id){
@@ -91,5 +87,3 @@ var Device = function() {
 util.inherits(Device, EventEmitter);
 
 module.exports.Device = Device;
-
-

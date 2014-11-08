@@ -1,0 +1,66 @@
+.displayValue{
+    height: 100%;
+    width: 100%;
+    overflow: auto;
+}
+
+.deviceValue{
+    position: relative;
+    
+    overflow: hidden;
+
+    height: 125px;
+    width: 140px;
+    padding:2px;
+    
+    background-color: whitesmoke;
+
+    margin: 15px 0 0 5px;
+}
+
+.deviceValueHeader,
+.deviceValueCenter,
+.deviceValueFooter{
+    position: absolute;
+    width: 100%;
+}
+
+.deviceValueHeader{
+    top: 0;
+    height: 20px;
+}
+
+.deviceValueCenter{
+    top: 0;
+    height: 100%;
+    width: 100%;
+}
+
+.deviceValueFooter{
+    bottom: 0px;
+    height: 35px;
+}
+
+.deviceValueKey{
+    text-align: center;
+}
+
+.deviceValueMain{
+    display:table;
+    height: 100%;
+    width: 100%;
+}
+
+.deviceValueMain span{
+    font-size: 45px;
+    line-height: 40px;
+    display:table-cell;
+    vertical-align:middle;
+    text-align:center;
+}
+
+.deviceValueSub{
+    font-size: 35px;
+    line-height: 35px;
+    text-align: center;
+}

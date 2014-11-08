@@ -33,19 +33,20 @@ var Value = function(device) {
 		var value = this.update('value', valueJson.value)
 
 		var change = index || name || value
+
 		if(change){
-			this.emit('change', this)
-			return true
+			this.emit('change', this);
+			return true;
 		}else{
-			return false
+			return false;
 		}
 	}
 
 	this.get = function(key){
 		if(!key)
-			return this.value
+			return this.value;
 		else
-			return this[key]
+			return this[key];
 	}
 	
 	this.update = function(key, val){

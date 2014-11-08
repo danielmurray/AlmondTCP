@@ -4,6 +4,7 @@ var fs = require("fs");
 var sys = require('sys');
 var util = require('util');
 var exec = require('child_process').exec;
+var execSync = require("exec-sync");
 
 var SSH = require('simple-ssh');
 var extend = require('xtend');
@@ -62,11 +63,8 @@ AlmondFS.prototype.update = function(localPath, remotePath){
 	var remoteFile = this.user + '@' + this.ip + ':'+ remotePath
 	var command = 'sshpass -p \'' + this.pass + '\' scp ' + localPath + ' ' + remoteFile
 
-	var callbackWrapper = function(a, b, c){
-		console.log(localPath + ' synced')
-	}
-
-	exec(command, callbackWrapper);
+	execSync(command);
+	console.log(localPath + ' synced')
 }
 
 
@@ -115,65 +113,66 @@ AlmondFS.prototype.buildPath = function(remoteFilePath, callback){
 	}
 }
 
-AlmondFS.prototype.diffRemoteFile = function(localFilePath, localFileText){
+AlmondFS.prototype.diffFile = function(localFilePath, remoteFilePath){
 	var that = this
-	var remoteFilePath = localFilePath.replace(this.rootDir, '')
+	
+	var remote = this.user + '@' + this.ip
+	var sshCommand = 'sshpass -p \'' + this.pass + '\' ssh ' + remote + ' cat ' + remoteFilePath
+	var command = sshCommand + ' | diff - ' + localFilePath
+	
+	return execSync(command, true)
 
-	var ssh = new SSH({
-	    host: this.ip,
-	    user: this.user,
-	    pass: this.pass
-	});
-
-	ssh.exec('cat '+ remoteFilePath, {
-		exit: function(code, stdout, stderr){
-			if( code ){
-				// err
-				console.log(remoteFilePath, '--- Doesn\'t Exist')
-				that.buildPath(remoteFilePath, function(){
-					that.update(localFilePath, remoteFilePath)
-				})
-			}else{
-				//success
-				var remoteFileText = stdout
-				if( localFileText !== remoteFileText){
-		        	console.log(remoteFilePath, '--- DIFF')
-		        	that.update(localFilePath, remoteFilePath)
-		        } else {
-		        	console.log(remoteFilePath, '--- OK')
-		        }
-			}
-
-	        ssh.end()
-		}
-	}).start();
 }
 
-AlmondFS.prototype.updateFile = function(file, callbackWrapper){
-	var that = this;
+// AlmondFS.prototype.updateFile = function(file, callbackWrapper){
+// 	var that = this;
 
-	if( !callbackWrapper ){
-		var callbackWrapper = function (err, localfile) {
-			if (err) {
-				var code = err.code
-				console.log('FOLLOWING CHANGE NOT SYNCED');
-				switch (code) {
-					case 'EISDIR':
-						console.log('Local$ mkdir', file );
-						break;
-					case 'ENOENT':
-						console.log('Local$ rmdir', file );
-						break;
-					default:
-						console.log(err)
-				}					
-			}else{
-				that.diffRemoteFile(file, localfile);
-			}
+// 	if( !callbackWrapper ){
+// 		var callbackWrapper = function (err, localfile) {
+// 			if (err) {
+// 				var code = err.code
+// 				console.log('FOLLOWING CHANGE NOT SYNCED');
+// 				switch (code) {
+// 					case 'EISDIR':
+// 						console.log('Local$ mkdir', file );
+// 						break;
+// 					case 'ENOENT':
+// 						console.log('Local$ rmdir', file );
+// 						break;
+// 					default:
+// 						console.log(err)
+// 				}					
+// 			}else{
+// 				that.diffRemoteFile(file, localfile);
+// 			}
+// 		}
+// 	}
+// 	fs.readFile(file, 'utf8', callbackWrapper);
+// }
+
+AlmondFS.prototype.updateFile = function(localFilePath){
+	//Determine if the file requires a push to Almond
+	var remoteFilePath = localFilePath.replace(this.rootDir, '')
+	var diff = this.diffFile(localFilePath, remoteFilePath);
+
+	if( diff.stderr ){
+		if(diff.stderr.search('No such file or directory') >= 0){
+			console.log('We must buld directory up to', localFilePath)
+		} else if(diff.stderr.search('to a directory') >= 0){
+			console.log('Local$ mkdir', localFilePath );			
+		} else{
+			console.log('Unknown Error')
+			console.log(diff.stderr)			
 		}
+	}else{
+		if( diff.stdout ){
+			console.log(localFilePath, Array(80 - localFilePath.length ).join("-"), 'DIFF' )
+			this.update(localFilePath, remoteFilePath)
+		}else{
+			console.log(localFilePath, Array(80 - localFilePath.length ).join("-"), 'OK' )
+		}	
 	}
 
-	fs.readFile(file, 'utf8', callbackWrapper);
 }
 
 AlmondFS.prototype.updateFiles = function(){
@@ -185,7 +184,7 @@ AlmondFS.prototype.updateFiles = function(){
 	var files = this.getLocalFiles(this.rootDir);
 	for(var i in files){
 		var file = files[i];
-		fs.readFile(file, 'utf8', this.updateFile(file) );
+		this.updateFile(file)
 	}
 }
 
@@ -208,6 +207,7 @@ AlmondFS.prototype.sync = function(){
 	var that = this;
 
 	var callbackWrapper = function(success,error){
+		console.log('-------File Listener Fully Armed & Operational-------')
 		watchTree(that.rootDir, function (event) {
 			var localFilePath = event.name
 			that.updateFile(localFilePath)

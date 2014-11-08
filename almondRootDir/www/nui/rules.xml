@@ -1,0 +1,64 @@
+<Rules>
+    <Rule id="1" name="In The Evening">
+        <Triggers>
+            <Trigger TriggerType="Device" ID="1" GroupingType="AND">
+                <Device devID="3" dvPairIndex="1">True</Device>
+            </Trigger>
+            <Trigger TriggerType="Device" ID="2" GroupingType="AND">
+                <Device devID="3" dvPairIndex="1">True</Device>
+            </Trigger>
+            <Trigger TriggerType="Time" ID="3" GroupingType="AND">
+                <Time Range="30">0700</Time>
+            </Trigger>
+        </Triggers>
+        <Results>
+            <Result ID="1" type="Device">
+                <Device devID="7" dvPairIndex="2">True</Device>
+                <Delay>1</Delay>
+            </Result>
+            <Result ID="2" type="Device">
+                <Device devID="8" dvPairIndex="1">100</Device>
+                <Delay>0</Delay>
+            </Result>
+            <Result ID="3" type="Group">
+                <Group groupID="2">True</Group>
+                <Delay>3</Delay>
+            </Result>
+            <Result ID="4" type="Scene">
+                <Scene sceneID="1">True</Scene>
+                <Delay>0</Delay>
+            </Result>
+        </Results>
+    </Rule>
+    <Rule id="2" name="In The Evening">
+        <Triggers>
+            <Trigger TriggerType="Device" ID="1" GroupingType="AND">
+                <Device devID="3" dvPairIndex="1">True</Device>
+            </Trigger>
+            <Trigger TriggerType="Device" ID="2" GroupingType="AND">
+                <Device devID="3" dvPairIndex="1">True</Device>
+            </Trigger>
+            <Trigger TriggerType="Time" ID="3" GroupingType="AND">
+                <Time Range="30">0700</Time>
+            </Trigger>
+        </Triggers>
+        <Results>
+            <Result ID="1" type="Device">
+                <Device devID="7" dvPairIndex="2">True</Device>
+                <Delay>1</Delay>
+            </Result>
+            <Result ID="2" type="Device">
+                <Device devID="8" dvPairIndex="1">100</Device>
+                <Delay>0</Delay>
+            </Result>
+            <Result ID="3" type="Group">
+                <Group groupID="2">True</Group>
+                <Delay>3</Delay>
+            </Result>
+            <Result ID="4" type="Scene">
+                <Scene sceneID="1">True</Scene>
+                <Delay>0</Delay>
+            </Result>
+        </Results>
+    </Rule>
+</Rules>

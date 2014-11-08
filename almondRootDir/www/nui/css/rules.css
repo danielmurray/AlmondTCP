@@ -1,0 +1,111 @@
+.rulesHeaderWrapper{
+	margin: 0 0 10px 0;
+}
+
+.rulesHeaderWrapperTable{
+	width: 100%;
+	height: 80px;
+	line-height: 80px;
+
+	position: relative;
+	border-collapse: collapse;
+}
+
+.rulesHeaderWrapperTable tr:first-child td{
+  border-top: 0;
+  border-bottom: 0;
+}
+
+.rulesHeaderWrapperTable td:first-child{
+  border: 0;
+}
+
+.rulesHeaderWrapperTable td:last-child{
+	border-right: 0;
+}
+
+.rulesHeaderWrapperTable td{
+  	border: 20px solid transparent;
+}
+
+.rulesHeaderWrapperTable td .prettyBox{
+	padding: 0 25px 0 25px;
+}
+
+.rulesHeader {
+	width: 100%;
+}
+
+.headerBox{
+	height: 100%;
+
+	font-family: 'Segoe UI Bold';
+	font-size: 35px;
+}
+
+.centerBox {
+	height: 100%;
+	width: 100%;
+}
+
+.actionBox{
+	font-size: 20px;
+
+}
+
+.filterInstructions{
+	float: left;
+	font-family: 'Segoe UI Bold';
+	font-size: 20px;
+	margin: 0 20px 0 0;
+}
+
+.filterIcon{
+	background-color: black;
+	height: 60px;
+	width: 60px;
+	margin: 10px 10px 10px 0;
+	float: left;
+	cursor: pointer;
+}
+
+.filterIcon.unselected{
+	opacity: 0.5;
+}
+
+.filterIcon.selected{
+	opacity: 1;
+}
+
+.typeIcon{
+	width: 60px;
+	height: 60px;
+	margin:auto;
+}
+
+.addRuleIcon{
+	height: 20px;
+}
+
+.ruleDownTriangle{
+	width: 0; 
+	height: 0; 
+
+	border-left: 20px solid transparent;
+	border-right: 20px solid transparent;
+	border-top: 20px solid whitesmoke;
+
+	margin: 0 auto;
+
+	-webkit-filter: drop-shadow(0px 2px 1px rgba(0,0,0,0.25));
+	-moz-filter: drop-shadow(0px 2px 1px rgba(0,0,0,0.25));
+	-ms-filter: drop-shadow(0px 2px 1px rgba(0,0,0,0.25));
+	-o-filter: drop-shadow(0px 2px 1px rgba(0,0,0,0.25));
+	filter: drop-shadow(0px 2px 1px rgba(0,0,0,0.25));
+}
+
+
+.contentContainer {
+  background-color: rgba(0,0,0,0);
+  box-shadow: 0 1px 1px rgba(0,0,0,0);
+}
