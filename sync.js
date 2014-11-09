@@ -58,17 +58,8 @@ AlmondFS.prototype.getLocalFiles = function(dir, files_){
     return files_;
 }
 
-AlmondFS.prototype.update = function(localPath, remotePath){
-
-	var remoteFile = this.user + '@' + this.ip + ':'+ remotePath
-	var command = 'sshpass -p \'' + this.pass + '\' scp ' + localPath + ' ' + remoteFile
-
-	execSync(command);
-	console.log(localPath + ' synced')
-}
-
-
 AlmondFS.prototype.buildPath = function(remoteFilePath, callback){
+	
 	var that = this;
 	var dirs = [];
 	var splitPath = remoteFilePath.split('/')
@@ -78,40 +69,56 @@ AlmondFS.prototype.buildPath = function(remoteFilePath, callback){
 						.slice(0,splitPath.length-1)
 						.join('/');
 
-		var ssh = new SSH({
-		    host: this.ip,
-		    user: this.user,
-		    pass: this.pass
-		});
+		console.log('mkdir', pathUpTo)
+	}
 
-		ssh.exec('mkdir '+ pathUpTo, {
-		    exit: function(code, stdout, stderr){
-				if( code ){
-					// err
-					if( stderr.indexOf("File exists") > 0 ){
-						// Parent dir already exists, just copy file over
-						if(callback)
-							callback()
-					}else{
-						// Parent dir already exists, just copy file over
-						// console.log('We Need to Go Deeper')
-						that.buildPath(pathUpTo, function(){
-							that.buildPath(remoteFilePath, callback)
-						})
-					}
-				}else{
-					//success
-					console.log('Remote$ mkdir', pathUpTo);
-					if(callback)
-						callback()
-				}
 
-		        ssh.end()
-			}
-		}).start();
+	// 	ssh.exec('mkdir '+ pathUpTo, {
+	// 	    exit: function(code, stdout, stderr){
+	// 			if( code ){
+	// 				// err
+	// 				if( stderr.indexOf("File exists") > 0 ){
+	// 					// Parent dir already exists, just copy file over
+	// 					if(callback)
+	// 						callback()
+	// 				}else{
+	// 					// Parent dir already exists, just copy file over
+	// 					// console.log('We Need to Go Deeper')
+	// 					that.buildPath(pathUpTo, function(){
+	// 						that.buildPath(remoteFilePath, callback)
+	// 					})
+	// 				}
+	// 			}else{
+	// 				//success
+	// 				console.log('Remote$ mkdir', pathUpTo);
+	// 				if(callback)
+	// 					callback()
+	// 			}
+
+	// 	        ssh.end()
+	// 		}
+	// 	}).start();
 		
+	// }
+}
+
+AlmondFS.prototype.update = function(localPath, remotePath){
+
+	var remoteFile = this.user + '@' + this.ip + ':'+ remotePath
+	var command = 'sshpass -p \'' + this.pass + '\' scp ' + localPath + ' ' + remoteFile
+
+	var output = execSync(command,true);
+	if( output.stderr ){
+
+		this.buildPath(remotePath)
+
+		// throw new Error('something bad happened');
+	}else{
+		console.log(localPath + ' synced')
 	}
 }
+
+
 
 AlmondFS.prototype.diffFile = function(localFilePath, remoteFilePath){
 	var that = this
@@ -119,36 +126,10 @@ AlmondFS.prototype.diffFile = function(localFilePath, remoteFilePath){
 	var remote = this.user + '@' + this.ip
 	var sshCommand = 'sshpass -p \'' + this.pass + '\' ssh ' + remote + ' cat ' + remoteFilePath
 	var command = sshCommand + ' | diff - ' + localFilePath
-	
+
 	return execSync(command, true)
 
 }
-
-// AlmondFS.prototype.updateFile = function(file, callbackWrapper){
-// 	var that = this;
-
-// 	if( !callbackWrapper ){
-// 		var callbackWrapper = function (err, localfile) {
-// 			if (err) {
-// 				var code = err.code
-// 				console.log('FOLLOWING CHANGE NOT SYNCED');
-// 				switch (code) {
-// 					case 'EISDIR':
-// 						console.log('Local$ mkdir', file );
-// 						break;
-// 					case 'ENOENT':
-// 						console.log('Local$ rmdir', file );
-// 						break;
-// 					default:
-// 						console.log(err)
-// 				}					
-// 			}else{
-// 				that.diffRemoteFile(file, localfile);
-// 			}
-// 		}
-// 	}
-// 	fs.readFile(file, 'utf8', callbackWrapper);
-// }
 
 AlmondFS.prototype.updateFile = function(localFilePath){
 	//Determine if the file requires a push to Almond
@@ -157,7 +138,7 @@ AlmondFS.prototype.updateFile = function(localFilePath){
 
 	if( diff.stderr ){
 		if(diff.stderr.search('No such file or directory') >= 0){
-			console.log('We must buld directory up to', localFilePath)
+			console.log('Local$ rmdir', localFilePath)
 		} else if(diff.stderr.search('to a directory') >= 0){
 			console.log('Local$ mkdir', localFilePath );			
 		} else{
@@ -165,11 +146,12 @@ AlmondFS.prototype.updateFile = function(localFilePath){
 			console.log(diff.stderr)			
 		}
 	}else{
+		var dashCount = 80 - localFilePath.length > 0 ? 80 - localFilePath.length : 0
 		if( diff.stdout ){
-			console.log(localFilePath, Array(80 - localFilePath.length ).join("-"), 'DIFF' )
+			console.log(localFilePath, Array(dashCount).join("-"), 'DIFF' )
 			this.update(localFilePath, remoteFilePath)
 		}else{
-			console.log(localFilePath, Array(80 - localFilePath.length ).join("-"), 'OK' )
+			console.log(localFilePath, Array(dashCount).join("-"), 'OK' )
 		}	
 	}
 
@@ -222,9 +204,9 @@ var almond = new AlmondFS({
 	user: 'root',
 	pass: 'root',
 	rootDir: 'almondRootDir'
-})
+});
 
 almond.connect()
-almond.sync()
+// almond.sync()
 
 
