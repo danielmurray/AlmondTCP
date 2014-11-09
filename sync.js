@@ -58,7 +58,7 @@ AlmondFS.prototype.getLocalFiles = function(dir, files_){
     return files_;
 }
 
-AlmondFS.prototype.buildPath = function(remoteFilePath, callback){
+AlmondFS.prototype.buildPath = function(remoteFilePath){
 	
 	var that = this;
 	var dirs = [];
@@ -69,37 +69,18 @@ AlmondFS.prototype.buildPath = function(remoteFilePath, callback){
 						.slice(0,splitPath.length-1)
 						.join('/');
 
-		console.log('mkdir', pathUpTo)
-	}
+		var remote = this.user + '@' + this.ip
+		var sshCommand = 'sshpass -p \'' + this.pass + '\' ssh ' + remote;
+		var command = sshCommand + ' mkdir ' + pathUpTo
 
-
-	// 	ssh.exec('mkdir '+ pathUpTo, {
-	// 	    exit: function(code, stdout, stderr){
-	// 			if( code ){
-	// 				// err
-	// 				if( stderr.indexOf("File exists") > 0 ){
-	// 					// Parent dir already exists, just copy file over
-	// 					if(callback)
-	// 						callback()
-	// 				}else{
-	// 					// Parent dir already exists, just copy file over
-	// 					// console.log('We Need to Go Deeper')
-	// 					that.buildPath(pathUpTo, function(){
-	// 						that.buildPath(remoteFilePath, callback)
-	// 					})
-	// 				}
-	// 			}else{
-	// 				//success
-	// 				console.log('Remote$ mkdir', pathUpTo);
-	// 				if(callback)
-	// 					callback()
-	// 			}
-
-	// 	        ssh.end()
-	// 		}
-	// 	}).start();
+		var output = execSync(command,true);
 		
-	// }
+		if( output.stderr ){
+			this.buildPath(pathUpTo)
+		}else{
+			console.log('Remote$ mkdir', pathUpTo);
+		}
+	}
 }
 
 AlmondFS.prototype.update = function(localPath, remotePath){
@@ -108,17 +89,14 @@ AlmondFS.prototype.update = function(localPath, remotePath){
 	var command = 'sshpass -p \'' + this.pass + '\' scp ' + localPath + ' ' + remoteFile
 
 	var output = execSync(command,true);
+	
 	if( output.stderr ){
-
 		this.buildPath(remotePath)
-
-		// throw new Error('something bad happened');
+		this.update(localPath, remotePath)
 	}else{
 		console.log(localPath + ' synced')
 	}
 }
-
-
 
 AlmondFS.prototype.diffFile = function(localFilePath, remoteFilePath){
 	var that = this
