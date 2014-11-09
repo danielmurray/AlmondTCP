@@ -20,6 +20,10 @@ var Devices = function() {
 	
 	// Should this be private?
 	this.devices = []
+
+	var change = function(value){
+		that.emit('change', that)
+	}
     
     this.ready = function(){
 		that.emit('ready', that)	
@@ -27,7 +31,7 @@ var Devices = function() {
 
 	this.listen = function(){
 		console.log('-------Device Listener Fully Armed & Operational-------')
-		fs.watch('/DeviceList.xml', function (curr, prev) {                                      
+		fs.watch('/DeviceList.xml', function (curr, prev) {
 			that.fetchDevices();
 		});
 	}
@@ -60,6 +64,7 @@ var Devices = function() {
 				var device = this.getDevice(deviceJson.DeviceID)
 				if( !device ){
 					device = new Device();
+					device.on('change', change);
 					this.devices.push(device)
 				}
 				device.updateDevice(deviceJson)
@@ -89,47 +94,5 @@ var Devices = function() {
 }
 util.inherits(Devices, EventEmitter);
 
-var devicesReady = function(devices){
 
-	var devicetoggle = function(deviceID, nextDeviceID){
-		var device = devices.getDevice(deviceID)
-		var nextDevice = devices.getDevice(deviceID)
-		var state = device.getValue(2).get('value')
-
-		console.log(state)
-		if(state == 'true'){
-			device.setValue(2,false)
-		}else{
-			nextDevice.setValue(2,true)
-		}
-		setTimeout(function() {
-		  devicetoggle(nextDeviceID, deviceID)
-		}, 200);
-	}
-
-	devicetoggle(9,12)
-
-
-}
-
-var devicesReady = function(){
-	var motion = devices.getDevice(7)
-	var loLamp = devices.getDevice(9)
-	motion.on('change',function(device){
-		console.log(device.getValue(1).get('value'))
-		var value = device.getValue(1).get('value')
-		if( value == 'true'){
-			loLamp.setValue(2, true)
-		}else{
-			console.log('hello')
-			loLamp.setValue(2, false)
-		}
-	})
-}
-
-var devices = new Devices();
-devices.on('ready', devicesReady)
-
-
-
-
+module.exports.Devices = Devices;

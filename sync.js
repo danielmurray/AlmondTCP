@@ -6,9 +6,7 @@ var util = require('util');
 var exec = require('child_process').exec;
 var execSync = require("exec-sync");
 
-var SSH = require('simple-ssh');
 var extend = require('xtend');
-var JsDiff = require('diff');
 var watchTree = require("fs-watch-tree").watchTree;
 
 
@@ -185,6 +183,6 @@ var almond = new AlmondFS({
 });
 
 almond.connect()
-// almond.sync()
+almond.sync()
 
 
