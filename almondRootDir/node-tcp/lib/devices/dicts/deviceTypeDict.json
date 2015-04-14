@@ -1,0 +1,464 @@
+{
+    "0": {
+        "typeId": 0,
+        "typeName": "undefined_type",
+        "tags": [
+            "undefined"
+        ],
+        "icon": "unsupported",
+        "valueTypes": [
+            {
+                "index": 1,
+                "display": 1,
+                "hidden": false,
+                "type": "number",
+                "tags": [
+                    "undefined"
+                ],
+                "states": {
+                    "0": {
+                        "id": "unsupported",
+                        "icon": "unsupported",
+                        "text": "Unsupported"
+                    }
+                }
+            }
+        ]
+    },
+    "1": {
+        "typeId": 1,
+        "typeName": "power_switch",
+        "tags": [
+            "power",
+            "switch"
+        ],
+        "icon": "switchOff",
+        "valueTypes": [
+            {
+                "index": 1,
+                "display": 1,
+                "hidden": false,
+                "type": "switch",
+                "tags": [
+                    "power",
+                    "switch"
+                ],
+                "states": {
+                    "0": {
+                        "id": "off",
+                        "icon": "switchOff",
+                        "text": "Off"
+                    },
+                    "1": {
+                        "id": "on",
+                        "icon": "switchOn",
+                        "text": "On"
+                    }
+                }
+            }
+        ]
+    },
+    "4": {
+        "typeId": 4,
+        "typeName": "slider",
+        "tags": [
+            "slider",
+            "level",
+            "dimmable"
+        ],
+        "icon": "bulbOn",
+        "valueTypes": [
+            {
+                "index": 1,
+                "display": 2,
+                "hidden": false,
+                "type": "slider",
+                "tags": [
+                    "slider",
+                    "level",
+                    "dimmable"
+                ],
+                "unit": "%",
+                "min": {
+                    "backend": 0,
+                    "frontend": 0
+                },
+                "max": {
+                    "backend": 255,
+                    "frontend": 100
+                },
+                "states": {
+                    "0": {
+                        "id": "off",
+                        "icon": "bulbOff",
+                        "text": "Off"
+                    },
+                    "1": {
+                        "id": "on",
+                        "icon": "bulbOn",
+                        "text": "On"
+                    }
+                }
+            },
+            {
+                "index": 2,
+                "display": 1,
+                "hidden": false,
+                "type": "switch",
+                "tags": [
+                    "slider",
+                    "switch"
+                ],
+                "states": {
+                    "0": {
+                        "id": "off",
+                        "icon": "bulbOff",
+                        "text": "Off"
+                    },
+                    "1": {
+                        "id": "on",
+                        "icon": "bulbOn",
+                        "text": "On"
+                    }
+                }
+            }
+        ]
+    },
+    "11": {
+        "typeId": 11,
+        "typeName": "motion_sensor",
+        "tags": [
+            "motion",
+            "sensor"
+        ],
+        "icon": "move",
+        "valueTypes": [
+            {
+                "index": 1,
+                "display": 1,
+                "hidden": false,
+                "type": "state",
+                "tags": [
+                    "motion",
+                    "sensor"
+                ],
+                "states": {
+                    "0": {
+                        "id": "nomotion",
+                        "icon": "stop",
+                        "text": "No Motion"
+                    },
+                    "1": {
+                        "id": "motion",
+                        "icon": "move",
+                        "text": "Something's Moving"
+                    }
+                }
+            },
+            {
+                "index": 2,
+                "display": 0,
+                "hidden": true,
+                "type": "alert",
+                "tags": [
+                    "battery",
+                    "low"
+                ],
+                "states": {
+                    "0": {
+                        "id": "okbattery",
+                        "icon": "okbattery",
+                        "text": "Battery Ok"
+                    },
+                    "1": {
+                        "id": "lowbattery",
+                        "icon": "lowbattery",
+                        "text": "Battery Low"
+                    }
+                }
+            },
+            {
+                "index": 3,
+                "display": 0,
+                "hidden": true,
+                "type": "alert",
+                "tags": [],
+                "states": {
+                    "0": {
+                        "id": "oktamper",
+                        "icon": "oktamper",
+                        "text": "Tamper Ok"
+                    },
+                    "1": {
+                        "id": "tampered",
+                        "icon": "tampered",
+                        "text": "Device Tampered"
+                    }
+                }
+            }
+        ]
+    },
+    "12": {
+        "typeId": 12,
+        "typeName": "door_sensor",
+        "tags": [
+            "door",
+            "sensor"
+        ],
+        "icon": "doorOpen",
+        "valueTypes": [
+            {
+                "index": 1,
+                "display": 1,
+                "hidden": false,
+                "type": "state",
+                "tags": [
+                    "door",
+                    "sensor",
+                    "contact"
+                ],
+                "states": {
+                    "0": {
+                        "id": "closed",
+                        "icon": "doorClose",
+                        "text": "Closed"
+                    },
+                    "1": {
+                        "id": "open",
+                        "icon": "doorOpen",
+                        "text": "Open"
+                    }
+                }
+            },
+            {
+                "index": 2,
+                "display": 0,
+                "hidden": true,
+                "type": "alert",
+                "tags": [
+                    "battery",
+                    "low"
+                ],
+                "states": {
+                    "0": {
+                        "id": "okbattery",
+                        "icon": "okbattery",
+                        "text": "Battery Ok"
+                    },
+                    "1": {
+                        "id": "lowbattery",
+                        "icon": "lowbattery",
+                        "text": "Battery Low"
+                    }
+                }
+            },
+            {
+                "index": 3,
+                "display": 0,
+                "hidden": true,
+                "type": "alert",
+                "tags": [],
+                "message": "We have detected that this device may have been tampered with (aka futzed with).",
+                "states": {
+                    "0": {
+                        "id": "oktamper",
+                        "icon": "oktamper",
+                        "text": "Tamper Ok"
+                    },
+                    "1": {
+                        "id": "tampered",
+                        "icon": "tampered",
+                        "text": "Device Tampered"
+                    }
+                }
+            }
+        ]
+    },
+    "14": {
+        "typeId": 14,
+        "typeName": "flood_sensor",
+        "tags": [
+            "flood",
+            "sensor"
+        ],
+        "icon": "flooding",
+        "valueTypes": [
+            {
+                "index": 1,
+                "display": 1,
+                "hidden": false,
+                "type": "state",
+                "tags": [
+                    "flood",
+                    "sensor",
+                    "contact"
+                ],
+                "states": {
+                    "0": {
+                        "id": "noflooding",
+                        "icon": "active",
+                        "text": "Okay"
+                    },
+                    "1": {
+                        "id": "flooding",
+                        "icon": "flooding",
+                        "text": "Flood"
+                    }
+                }
+            },
+            {
+                "index": 2,
+                "display": 0,
+                "hidden": true,
+                "type": "alert",
+                "tags": [
+                    "battery",
+                    "low"
+                ],
+                "message": "Battery is running low, change it or suffer the consequences.",
+                "states": {
+                    "0": {
+                        "id": "okbattery",
+                        "icon": "okbattery",
+                        "text": "Battery Ok"
+                    },
+                    "1": {
+                        "id": "lowbattery",
+                        "icon": "lowbattery",
+                        "text": "Battery Low"
+                    }
+                }
+            },
+            {
+                "index": 3,
+                "display": 0,
+                "hidden": true,
+                "type": "alert",
+                "tags": [],
+                "message": "We have detected that this device may have been tampered with (aka futzed with).",
+                "states": {
+                    "0": {
+                        "id": "oktamper",
+                        "icon": "oktamper",
+                        "text": "Tamper Ok"
+                    },
+                    "1": {
+                        "id": "tampered",
+                        "icon": "tampered",
+                        "text": "Device Tampered"
+                    }
+                }
+            }
+        ]
+    },
+    "22": {
+        "typeId": 22,
+        "typeName": "power_meter_switch",
+        "tags": [
+            "power",
+            "meter",
+            "switch"
+        ],
+        "icon": "mulswitchoff",
+        "valueTypes": [
+            {
+                "index": 1,
+                "display": 1,
+                "hidden": false,
+                "type": "switch",
+                "tags": [
+                    "power",
+                    "switch"
+                ],
+                "states": {
+                    "0": {
+                        "id": "off",
+                        "icon": "mulswitchoff",
+                        "text": "Off"
+                    },
+                    "1": {
+                        "id": "on",
+                        "icon": "mulswitchon",
+                        "text": "On"
+                    }
+                }
+            }
+        ],
+        "newvalues": [
+            {
+                "index": 1,
+                "id": "power",
+                "name": "Power",
+                "type": "number",
+                "tags": [
+                    "power"
+                ],
+                "value": {
+                    "type": "analog",
+                    "unit": "watts",
+                    "states": {
+                        "0": {
+                            "id": "power",
+                            "icon": "noIcon",
+                            "text": "Power"
+                        }
+                    }
+                }
+            },
+            {
+                "index": 2,
+                "id": "current",
+                "name": "Current",
+                "type": "number",
+                "tags": [],
+                "value": {
+                    "type": "analog",
+                    "unit": "amps",
+                    "states": {
+                        "0": {
+                            "id": "current",
+                            "icon": "noIcon",
+                            "text": "Current"
+                        }
+                    }
+                }
+            },
+            {
+                "index": 3,
+                "id": "voltage",
+                "name": "Voltage",
+                "type": "number",
+                "tags": [],
+                "value": {
+                    "type": "analog",
+                    "unit": "volts",
+                    "states": {
+                        "0": {
+                            "id": "voltage",
+                            "icon": "noIcon",
+                            "text": "Voltage"
+                        }
+                    }
+                }
+            },
+            {
+                "index": 4,
+                "id": "frequency",
+                "name": "Frequency",
+                "type": "number",
+                "tags": [],
+                "value": {
+                    "type": "analog",
+                    "unit": "hertz",
+                    "states": {
+                        "0": {
+                            "id": "frequency",
+                            "icon": "noIcon",
+                            "text": "Frequency"
+                        }
+                    }
+                }
+            }
+        ]
+    }
+}

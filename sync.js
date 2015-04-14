@@ -10,6 +10,14 @@ var extend = require('xtend');
 var watchTree = require("fs-watch-tree").watchTree;
 
 
+var syncExec = function(command){
+	var output = execSync(command, true);
+
+	if ( output.stderr.indexOf("command not found") > -1)
+		throw output.stderr;
+
+	return output
+}
 
 var AlmondFS = function(config){
 
@@ -17,7 +25,7 @@ var AlmondFS = function(config){
         ip: '192.168.1.1',
         user: 'root',
         pass: 'root',
-        rootDir: 'almondRootDir'
+        rootDir: 'rootDir'
     }, config);
 
     this.ip = config.ip;
@@ -25,19 +33,35 @@ var AlmondFS = function(config){
     this.pass = config.pass;
     this.rootDir = config.rootDir;
 
+	this.ignoreFiles = [
+		'node_modules',
+		'.coveragerc',
+		'.git',
+		'.gitignore',
+		'.travis.yml',
+		'.DS_Store'
+	]
+
 }
 
 AlmondFS.prototype.ping = function(callback){
-
 	function callbackWrapper(error, stdout, stderr) { 
 		var success = false;
-		if(stdout){
+		if(stdout != 0){
 			var success = true;
 		}
 		callback(success, error);
 	}
 
-	exec("ping -c 1 " + this.ip + " | grep icmp* | wc -l", callbackWrapper);
+	var result = syncExec("ping -c 1 " + this.ip + " | grep icmp* | wc -l", callbackWrapper);
+
+	var stdout = Math.round(result.stdout.trim())
+	var stderr = result.stderr
+
+	return {
+		stderr: stderr,
+		stdout: stdout
+	}
 }
 
 AlmondFS.prototype.getLocalFiles = function(dir, files_){
@@ -45,6 +69,9 @@ AlmondFS.prototype.getLocalFiles = function(dir, files_){
     if (typeof files_ === 'undefined') files_=[];
     var files = fs.readdirSync(dir);
     for(var i in files){
+    	if( this.ignoreFiles.indexOf(files[i]) != -1 ) {
+    		continue;    		
+    	}
         if (!files.hasOwnProperty(i)) continue;
         var name = dir+'/'+files[i];
         if (fs.statSync(name).isDirectory()){
@@ -71,9 +98,11 @@ AlmondFS.prototype.buildPath = function(remoteFilePath){
 		var sshCommand = 'sshpass -p \'' + this.pass + '\' ssh ' + remote;
 		var command = sshCommand + ' mkdir ' + pathUpTo
 
-		var output = execSync(command,true);
-		
-		if( output.stderr ){
+		var output = syncExec(command);
+
+		if( output.stderr.indexOf("Permission denied") > -1 ){
+			throw output.stderr;
+		}else if( output.stderr ){
 			this.buildPath(pathUpTo)
 		}else{
 			console.log('Remote$ mkdir', pathUpTo);
@@ -83,51 +112,61 @@ AlmondFS.prototype.buildPath = function(remoteFilePath){
 
 AlmondFS.prototype.update = function(localPath, remotePath){
 
-	var remoteFile = this.user + '@' + this.ip + ':'+ remotePath
-	var command = 'sshpass -p \'' + this.pass + '\' scp ' + localPath + ' ' + remoteFile
+	var remoteFile = this.user + '@' + this.ip + ':'+ remotePath;
+	var command = 'sshpass -p \'' + this.pass + '\' scp ' + localPath + ' ' + remoteFile;
+	var output = syncExec(command);
 
-	var output = execSync(command,true);
-	
 	if( output.stderr ){
-		this.buildPath(remotePath)
-		this.update(localPath, remotePath)
+		this.buildPath(remotePath);
+		this.update(localPath, remotePath);
 	}else{
-		console.log(localPath + ' synced')
+		console.log(localPath + ' synced');
 	}
 }
 
 AlmondFS.prototype.diffFile = function(localFilePath, remoteFilePath){
-	var that = this
-	
-	var remote = this.user + '@' + this.ip
-	var sshCommand = 'sshpass -p \'' + this.pass + '\' ssh ' + remote + ' cat ' + remoteFilePath
-	var command = sshCommand + ' | diff - ' + localFilePath
+	var that = this;
+	var remote = this.user + '@' + this.ip;
+	var sshCommand = 'sshpass -p \'' + this.pass + '\' ssh ' + remote + ' cat ' + remoteFilePath;
+	var command = sshCommand + ' | diff - ' + localFilePath;
+	return syncExec(command, true);
 
-	return execSync(command, true)
+}
+
+
+
+AlmondFS.prototype.getRemoteFilePath = function(localFilePath){
+	var filePath = localFilePath.replace(this.rootDir, '')
+
+	if(this.user == 'root'){
+		return filePath
+	}else{
+		return '/home/'+ this.user + filePath
+	}
 
 }
 
 AlmondFS.prototype.updateFile = function(localFilePath){
 	//Determine if the file requires a push to Almond
-	var remoteFilePath = localFilePath.replace(this.rootDir, '')
+	var remoteFilePath = this.getRemoteFilePath(localFilePath)
 	var diff = this.diffFile(localFilePath, remoteFilePath);
-
 	if( diff.stderr ){
 		if(diff.stderr.search('No such file or directory') >= 0){
-			console.log('Local$ rmdir', localFilePath)
+			console.log('Local$ rmdir', localFilePath);
 		} else if(diff.stderr.search('to a directory') >= 0){
 			console.log('Local$ mkdir', localFilePath );			
 		} else{
-			console.log('Unknown Error')
-			console.log(diff.stderr)			
+			console.log('Unknown Error');
+			console.log(diff.stderr);			
 		}
 	}else{
-		var dashCount = 80 - localFilePath.length > 0 ? 80 - localFilePath.length : 0
+		var dashCount = 80 - localFilePath.length > 0 ? 80 - localFilePath.length : 0 ;
 		if( diff.stdout ){
-			console.log(localFilePath, Array(dashCount).join("-"), 'DIFF' )
-			this.update(localFilePath, remoteFilePath)
+			console.log(localFilePath, Array(dashCount).join("-"), 'DIFF' );
+			return this.update(localFilePath, remoteFilePath);
 		}else{
-			console.log(localFilePath, Array(dashCount).join("-"), 'OK' )
+			console.log(localFilePath, Array(dashCount).join("-"), 'OK' );
+			return true;
 		}	
 	}
 
@@ -149,40 +188,45 @@ AlmondFS.prototype.updateFiles = function(){
 AlmondFS.prototype.connect = function(){
 	var that = this;
 
-	var callbackWrapper = function(success,error){
-		if(success){
-			that.updateFiles()
-		}else{
-			console.log('No Almond+ Detected...')
-			console.log('Check your WiFi Connection')
-		}
+	var result = this.ping()
+
+	if(result.stdout != 0){
+		that.updateFiles()
+	}else{
+		console.log('No Almond Detected...')
+		console.log('Check your WiFi Connection and Almond IP')
 	}
 
-	this.ping(callbackWrapper)
 }
 
 AlmondFS.prototype.sync = function(){
 	var that = this;
 
-	var callbackWrapper = function(success,error){
+	var result = this.ping()
+
+	if(result.stdout != 0){
 		console.log('-------File Listener Fully Armed & Operational-------')
 		watchTree(that.rootDir, function (event) {
 			var localFilePath = event.name
 			that.updateFile(localFilePath)
 		});
+	}else{
+		console.log('No Almond+ Detected...')
+		console.log('Check your WiFi Connection and Almond IP')
 	}
-	this.ping(callbackWrapper)
+
+	
 }
 
 
-var almond = new AlmondFS({
-	ip: '10.10.10.121',
+var Almond = new AlmondFS({
+	ip: '10.10.10.127',
 	user: 'root',
 	pass: 'root',
 	rootDir: 'almondRootDir'
 });
 
-almond.connect()
-almond.sync()
+Almond.connect()
+Almond.sync()
 
 

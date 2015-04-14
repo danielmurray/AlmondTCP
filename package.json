@@ -1,33 +1,25 @@
 {
   "name": "almondjs",
-  "version": "0.0",
-  "description": "almond hive mind",
-  "keywords": [
-    "almond",
-    "plus",
-    "node",
-    "javascript",
-    "websocket"
-  ],
+  "version": "1.0.0",
+  "description": "Almond API TCP Server",
+  "main": "sync.js",
+  "dependencies": {
+    "exec-sync": "^0.1.6",
+    "fs-watch-tree": "^0.2.5",
+    "xtend": "^4.0.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
   "repository": {
     "type": "git",
-    "url": "git://github.com/danielmurray/AlmondJS"
+    "url": "https://github.com/danielmurray/AlmondJS.git"
   },
-  "scripts": {
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/danielmurray/AlmondJS/issues"
   },
-  "dependencies": {
-    "exec-sync": "0.1.6",
-    "fs-watch-tree": "0.2.5",
-    "xtend": "4.0.0",
-    "socket.io": "1.2.0",
-    "express": "4.10.1"
-  },
-  "devDependencies": {
-  },
-  "contributors": [
-    {
-      "name": "Daniel Murray",
-      "email": "daniel.phillip.murray(at)gmail.com"
-    }
-  ]
+  "homepage": "https://github.com/danielmurray/AlmondJS"
 }

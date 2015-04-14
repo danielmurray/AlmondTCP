@@ -1,10 +1,7 @@
 0 info it worked if it ends with ok
-1 verbose cli [ '/usr/local/bin/node',
-1 verbose cli   '/usr/local/bin/npm',
-1 verbose cli   'install',
-1 verbose cli   'fs-watch-tree' ]
+1 verbose cli [ 'node', '/usr/local/bin/npm', 'install', 'express' ]
 2 info using npm@1.4.28
-3 info using node@v0.10.36
+3 info using node@v0.10.33
 4 error Error: Invalid version: "0.0"
 4 error     at Object.module.exports.fixVersionField (/usr/local/lib/node_modules/npm/node_modules/read-package-json/node_modules/normalize-package-data/lib/fixer.js:183:13)
 4 error     at /usr/local/lib/node_modules/npm/node_modules/read-package-json/node_modules/normalize-package-data/lib/normalize.js:30:38
@@ -13,15 +10,15 @@
 4 error     at final (/usr/local/lib/node_modules/npm/node_modules/read-package-json/read-json.js:342:33)
 4 error     at then (/usr/local/lib/node_modules/npm/node_modules/read-package-json/read-json.js:126:33)
 4 error     at /usr/local/lib/node_modules/npm/node_modules/read-package-json/read-json.js:331:40
-4 error     at evalmachine.<anonymous>:272:14
+4 error     at evalmachine.<anonymous>:271:14
 4 error     at /usr/local/lib/node_modules/npm/node_modules/graceful-fs/graceful-fs.js:102:5
-4 error     at Object.oncomplete (evalmachine.<anonymous>:108:15)
+4 error     at Object.oncomplete (evalmachine.<anonymous>:107:15)
 5 error If you need help, you may report this *entire* log,
 5 error including the npm and node versions, at:
 5 error     <http://github.com/npm/npm/issues>
-6 error System Darwin 13.4.0
-7 error command "/usr/local/bin/node" "/usr/local/bin/npm" "install" "fs-watch-tree"
-8 error cwd /Users/danielmurray/Developer/almondjs
-9 error node -v v0.10.36
+6 error System Darwin 13.3.0
+7 error command "node" "/usr/local/bin/npm" "install" "express"
+8 error cwd /Users/rob/Developer/almondjs/almondRootDir/node/lib/devices
+9 error node -v v0.10.33
 10 error npm -v 1.4.28
 11 verbose exit [ 1, true ]
